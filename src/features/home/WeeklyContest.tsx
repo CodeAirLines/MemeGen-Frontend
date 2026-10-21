@@ -1,0 +1,206 @@
+import React, { useState } from 'react';
+import { Trophy, Award, Heart, ThumbsUp, CheckCircle2, Sparkles } from 'lucide-react';
+import { useTemplateStore } from '../../stores/useTemplateStore';
+import { POPULAR_TEMPLATES } from '../../constants/templates';
+
+const RUNNERS_UP = [
+  {
+    rank: 2,
+    title: 'Monday morning standup meeting',
+    author: '@doge_master',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80',
+    upvotes: '34.2K',
+    badge: 'Silver Medalist',
+  },
+  {
+    rank: 3,
+    title: 'When AI finishes the report in 0.2s',
+    author: '@pixel_jedi',
+    avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80',
+    upvotes: '29.8K',
+    badge: 'Bronze Medalist',
+  },
+  {
+    rank: 4,
+    title: 'Checking my portfolio after 5 minutes',
+    author: '@crypto_king',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+    upvotes: '21.4K',
+    badge: 'Finalist',
+  },
+];
+
+export const WeeklyContest: React.FC = () => {
+  const [voted, setVoted] = useState(false);
+  const [upvotes, setUpvotes] = useState(48620);
+  const openPreview = useTemplateStore((state) => state.openPreview);
+  const setSelectedTemplate = useTemplateStore((state) => state.setSelectedTemplate);
+
+  const handleVote = () => {
+    if (!voted) {
+      setUpvotes((prev) => prev + 1);
+      setVoted(true);
+    } else {
+      setUpvotes((prev) => prev - 1);
+      setVoted(false);
+    }
+  };
+
+  const handleEnterContest = () => {
+    if (POPULAR_TEMPLATES.length > 2) {
+      setSelectedTemplate(POPULAR_TEMPLATES[2]);
+      openPreview(POPULAR_TEMPLATES[2]);
+    }
+  };
+
+  return (
+    <section className="bg-gradient-to-br from-slate-900 via-[#0d214d] to-[#071330] text-white rounded-3xl p-6 sm:p-10 lg:p-12 overflow-hidden shadow-2xl relative" aria-label="Weekly Meme Contest">
+      {/* Ambient background glows */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-400/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/15 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Top Banner Tag */}
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-white/10">
+        <div className="space-y-1.5 text-left">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider border border-amber-400/30">
+            <Trophy className="w-3.5 h-3.5" />
+            <span>Weekly Creator Challenge</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Hall of Fame & Community Contest
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 font-normal">
+            Every week 2M+ members vote on the best community memes. Win creator cash prizes and get verified.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleEnterContest}
+          className="self-start md:self-auto bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg shadow-amber-400/20 flex items-center gap-2 transition-all cursor-pointer active:scale-95"
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>Enter Next Week's Contest</span>
+        </button>
+      </div>
+
+      {/* Main Grid: Winner Spotlight on Left, Leaderboard on Right */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8 items-center">
+        {/* Left: 1st Place Winner Spotlight */}
+        <div className="lg:col-span-7 bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 backdrop-blur-md space-y-4 text-left hover:border-amber-400/40 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300 group">
+          <div className="flex items-center justify-between">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-400 text-amber-950 text-xs font-extrabold shadow-sm group-hover:scale-105 transition-transform">
+              <Trophy className="w-3.5 h-3.5" />
+              <span>1st Place • Week #42 Winner</span>
+            </div>
+            <span className="text-xs text-amber-300 font-semibold">$500 Grant Winner</span>
+          </div>
+
+          {/* Meme Image Preview */}
+          <div className="relative rounded-xl overflow-hidden aspect-[16/10] bg-slate-900 border border-white/10 shadow-xl group cursor-pointer">
+            <img
+              src="https://i.imgflip.com/1g8my4.jpg"
+              alt="Two Buttons Meme Winner"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Top / Bottom Captions */}
+            <div
+              className="absolute top-3 inset-x-3 text-center font-extrabold text-white text-sm sm:text-base uppercase tracking-wider select-none leading-tight"
+              style={{
+                textShadow: '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000',
+              }}
+            >
+              When you fix 1 bug in code
+            </div>
+            <div
+              className="absolute bottom-3 inset-x-3 text-center font-extrabold text-white text-sm sm:text-base uppercase tracking-wider select-none leading-tight"
+              style={{
+                textShadow: '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000',
+              }}
+            >
+              And 12 new bugs appear
+            </div>
+          </div>
+
+          {/* Creator Profile & Vote Button */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+            <div className="flex items-center gap-3">
+              <img
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                alt="Sarah Codes"
+                className="w-10 h-10 rounded-full border-2 border-amber-400 object-cover hover:scale-115 transition-transform cursor-pointer"
+              />
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-sm text-white">@sarah_codes</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+                </div>
+                <span className="text-[11px] text-slate-300">Creator of the Month</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleVote}
+              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ${
+                voted
+                  ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
+                  : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+              }`}
+            >
+              <Heart className={`w-3.5 h-3.5 ${voted ? 'fill-white' : ''}`} />
+              <span>{upvotes.toLocaleString()} Upvotes</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Right: Runners Up & Current Challenge */}
+        <div className="lg:col-span-5 space-y-4 text-left">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-cyan-400" />
+              <span>Top Nominees</span>
+            </h3>
+            <span className="text-xs text-cyan-300 font-semibold">Live Tally</span>
+          </div>
+
+          {/* List of 3 runners-up */}
+          <div className="space-y-2.5">
+            {RUNNERS_UP.map((item) => (
+              <div
+                key={item.rank}
+                className="bg-white/5 hover:bg-white/15 hover:border-cyan-400/40 hover:translate-x-1.5 border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3 transition-all duration-200 cursor-pointer group"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-blue-600/40 text-blue-200 border border-blue-400/30 flex items-center justify-center font-extrabold text-xs shrink-0 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    #{item.rank}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-white truncate group-hover:text-cyan-300 transition-colors">{item.title}</p>
+                    <p className="text-[11px] text-slate-400">{item.author}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1 text-xs text-amber-300 font-bold shrink-0 group-hover:scale-110 transition-transform">
+                  <ThumbsUp className="w-3.5 h-3.5" />
+                  <span>{item.upvotes}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Next Round Announcement Card */}
+          <div className="p-4 rounded-xl bg-blue-950/60 border border-blue-500/30 space-y-2 mt-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-cyan-300">Next Round #43</span>
+              <span className="text-[10px] text-slate-400">Ends in 2d 14h</span>
+            </div>
+            <p className="text-xs text-slate-200 font-medium leading-relaxed">
+              Theme: <strong>"Expectation vs. Reality in Modern Life"</strong>. Submit your take for a chance to win the community trophy!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
