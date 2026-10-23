@@ -3,7 +3,7 @@ import { Type, Smile, Video, CheckCircle2, Zap } from 'lucide-react';
 
 export const FeatureSpotlights: React.FC = () => {
   return (
-    <section className="space-y-20 sm:space-y-24" aria-label="Feature Spotlights">
+    <section id="features" className="scroll-mt-24 space-y-20 sm:space-y-24" aria-label="Feature Spotlights">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider">
@@ -152,7 +152,7 @@ export const FeatureSpotlights: React.FC = () => {
       </div>
 
       {/* Row 3: GIF Maker & Video Looper */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div id="gif-maker" className="scroll-mt-24 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
         {/* Visual Mockup */}
         <div className="lg:col-span-6 bg-slate-50 border border-slate-200/90 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <div className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">

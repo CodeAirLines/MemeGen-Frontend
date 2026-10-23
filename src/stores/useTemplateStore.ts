@@ -29,7 +29,7 @@ interface TemplateState {
 export const useTemplateStore = create<TemplateState>((set) => ({
   selectedTemplate: null,
   searchQuery: '',
-  activeCategory: 'all',
+  activeCategory: 'All',
   previewTemplate: null,
   isPreviewOpen: false,
   notification: null,
@@ -66,6 +66,6 @@ export const useTemplateStore = create<TemplateState>((set) => ({
   resetFilters: () =>
     set({
       searchQuery: '',
-      activeCategory: 'all',
+      activeCategory: 'All',
     }),
 }));

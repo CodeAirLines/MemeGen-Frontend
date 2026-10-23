@@ -35,7 +35,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 1999,
     boxCount: 2,
     category: 'trending',
-    tags: ['shinchan', 'anime', 'not that special', 'funny', 'blushing', 'reaction', 'trending'],
+    tags: ['shinchan', 'anime', 'not that special', 'funny', 'blushing', 'reaction', 'reactions', 'trending', 'movies & tv'],
     description: 'Shinchan blushing with hands behind his head saying "I am not really that special".',
     usageCount: 2150000,
     defaultTextSlots: [
@@ -51,7 +51,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 1200,
     boxCount: 2,
     category: 'classic',
-    tags: ['drake', 'approval', 'disapproval', 'preference', 'classic', 'trending'],
+    tags: ['drake', 'approval', 'disapproval', 'preference', 'classic', 'trending', 'reactions'],
     description: 'Drake gesturing disapproval in the top panel and enthusiastic approval in the bottom panel.',
     usageCount: 1420500,
     defaultTextSlots: [
@@ -67,7 +67,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 800,
     boxCount: 3,
     category: 'trending',
-    tags: ['jealousy', 'distraction', 'temptation', 'funny', 'trending'],
+    tags: ['jealousy', 'distraction', 'temptation', 'funny', 'trending', 'reactions', 'business'],
     description: 'A man walking with his girlfriend turns his head to check out another woman walking by.',
     usageCount: 980200,
     defaultTextSlots: [
@@ -84,7 +84,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 908,
     boxCount: 2,
     category: 'classic',
-    tags: ['dilemma', 'choice', 'sweating', 'decision', 'classic'],
+    tags: ['dilemma', 'choice', 'sweating', 'decision', 'classic', 'gaming', 'business'],
     description: 'A stressed character sweating profusely while trying to choose between two difficult buttons.',
     usageCount: 840100,
     defaultTextSlots: [
@@ -100,7 +100,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 361,
     boxCount: 1,
     category: 'classic',
-    tags: ['debate', 'opinion', 'table', 'sign', 'classic'],
+    tags: ['debate', 'opinion', 'table', 'sign', 'classic', 'business'],
     description: 'Steven Crowder sitting behind a folding table with a banner on a college campus challenging people.',
     usageCount: 520400,
     defaultTextSlots: [
@@ -115,7 +115,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 1202,
     boxCount: 4,
     category: 'classic',
-    tags: ['intelligence', 'enlightenment', 'levels', 'irony', 'classic'],
+    tags: ['intelligence', 'enlightenment', 'levels', 'irony', 'classic', 'gaming'],
     description: 'A multi-tier progression from small brain to cosmic glowing mind showing levels of ironic sophistication.',
     usageCount: 654200,
     defaultTextSlots: [
@@ -131,7 +131,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 282,
     boxCount: 2,
     category: 'reactions',
-    tags: ['dog', 'fire', 'coffee', 'fine', 'crisis', 'reactions', 'work', 'animals'],
+    tags: ['dog', 'fire', 'coffee', 'fine', 'crisis', 'reactions', 'work', 'business', 'animals'],
     description: 'KC Green anthropomorphic dog calmly sipping coffee while the entire room is engulfed in flames.',
     usageCount: 890400,
     defaultTextSlots: [
@@ -147,7 +147,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 500,
     boxCount: 2,
     category: 'classic',
-    tags: ['success', 'kid', 'beach', 'win', 'fist', 'classic'],
+    tags: ['success', 'kid', 'beach', 'win', 'fist', 'classic', 'gaming', 'business'],
     description: 'A determined toddler on a beach clenching his fist in victory.',
     usageCount: 780000,
     defaultTextSlots: [
@@ -163,7 +163,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 335,
     boxCount: 2,
     category: 'classic',
-    tags: ['boromir', 'mordor', 'lord of the rings', 'movies', 'classic'],
+    tags: ['boromir', 'mordor', 'lord of the rings', 'movies & tv', 'classic', 'gaming'],
     description: 'Boromir from Lord of the Rings explaining that one does not simply walk into Mordor.',
     usageCount: 610300,
     defaultTextSlots: [
@@ -195,7 +195,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 395,
     boxCount: 2,
     category: 'classic',
-    tags: ['smart', 'logic', 'tapping head', 'humor', 'loophole', 'classic'],
+    tags: ['smart', 'logic', 'tapping head', 'humor', 'loophole', 'classic', 'business'],
     description: 'Kayode Ewumi tapping his temple with a sly smile, presenting humorous loophole logic.',
     usageCount: 430900,
     defaultTextSlots: [
@@ -211,7 +211,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 450,
     boxCount: 2,
     category: 'reactions',
-    tags: ['spiderman', 'pointing', 'identical', 'clone', 'twins', 'reactions'],
+    tags: ['spiderman', 'pointing', 'identical', 'clone', 'twins', 'reactions', 'movies & tv'],
     description: 'Two identical 1960s cartoon Spider-Men pointing accusingly at each other.',
     usageCount: 740100,
     defaultTextSlots: [
@@ -227,7 +227,7 @@ export const POPULAR_TEMPLATES: MemeTemplate[] = [
     height: 400,
     boxCount: 2,
     category: 'trending',
-    tags: ['grogu', 'star wars', 'cute', 'soup', 'movies & tv', 'trending'],
+    tags: ['grogu', 'star wars', 'cute', 'soup', 'movies & tv', 'trending', 'animals'],
     description: 'Adorable Grogu (Baby Yoda) standing curiously with oversized ears and innocent wide eyes.',
     usageCount: 520800,
     defaultTextSlots: [

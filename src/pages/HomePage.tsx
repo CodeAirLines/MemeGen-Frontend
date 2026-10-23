@@ -22,7 +22,7 @@ import {
 import { TemplateGrid } from '../features/templates/TemplateGrid';
 import { TemplatePreviewModal } from '../features/templates/TemplatePreviewModal';
 import { COMMUNITY_MEMES, POPULAR_TEMPLATES, type CommunityMeme } from '../constants/templates';
-import { Modal } from '../components/ui/Modal';
+import { Modal, Button, Badge, Container } from '../components/ui';
 import { useTemplateStore } from '../stores/useTemplateStore';
 import { InteractivePlayground } from '../features/home/InteractivePlayground';
 import { TrendingGenres } from '../features/home/TrendingGenres';
@@ -67,18 +67,20 @@ export const HomePage: React.FC = () => {
       {/* ============================================================== */}
       {/* 1. HERO SECTION (Dark Blue Gradient)                           */}
       {/* ============================================================== */}
-      <section className="relative w-full bg-gradient-to-b from-[#071330] via-[#091f58] to-[#0e358e] text-white pt-24 sm:pt-32 pb-24 sm:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section id="home" className="relative w-full bg-gradient-to-b from-[#071330] via-[#091f58] to-[#0e358e] text-white pt-24 sm:pt-32 pb-24 sm:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden scroll-mt-20">
         {/* Subtle Ambient Radial Lighting */}
         <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/15 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-10 right-10 w-[450px] h-[450px] bg-cyan-400/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto">
+        <Container size="lg" cleanPadding>
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Headline & CTAs */}
             <div className="lg:col-span-7 space-y-6 text-left z-10">
               {/* Top Pill Tag */}
-              <div className="inline-block text-[11px] font-bold tracking-widest text-cyan-300 uppercase">
-                CREATE • EDIT • SHARE • GO VIRAL
+              <div>
+                <Badge variant="dark" size="sm" dot>
+                  CREATE • EDIT • SHARE • GO VIRAL
+                </Badge>
               </div>
 
               {/* Main Headline */}
@@ -98,20 +100,25 @@ export const HomePage: React.FC = () => {
 
               {/* Buttons */}
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                <button
-                  type="button"
-                  onClick={handleSelectStarter}
-                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer group"
-                >
-                  <span>Create a Meme</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
-                </button>
+                <a href="#templates" className="w-full sm:w-auto">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    rightIcon={<ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />}
+                    className="w-full sm:w-auto shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105 active:scale-95 group font-semibold"
+                  >
+                    Explore Templates
+                  </Button>
+                </a>
 
-                <a
-                  href="#templates"
-                  className="w-full sm:w-auto text-center bg-white hover:bg-slate-50 text-slate-900 font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-xl hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer"
-                >
-                  Explore Templates
+                <a href="#create" className="w-full sm:w-auto">
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="w-full sm:w-auto shadow-md hover:shadow-xl hover:-translate-y-1 hover:scale-105 active:scale-95 font-semibold text-slate-900"
+                  >
+                    Try Meme Playground
+                  </Button>
                 </a>
               </div>
 
@@ -151,7 +158,19 @@ export const HomePage: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-tr from-cyan-400/30 via-blue-600/35 to-rose-500/20 rounded-full blur-3xl pointer-events-none scale-125 animate-pulse-subtle" />
 
               {/* Main Straight Meme Canvas Card: SHIN-CHAN */}
-              <div className="relative w-full max-w-[340px] sm:max-w-none sm:w-96 lg:w-[410px] rounded-3xl bg-white p-3 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_40px_rgba(37,99,235,0.3)] border border-white/80 rotate-0 hover:scale-[1.02] hover:shadow-[0_30px_70px_-15px_rgba(6,182,212,0.35)] transition-all duration-300 cursor-pointer group z-10">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={handleSelectStarter}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSelectStarter();
+                  }
+                }}
+                aria-label="Preview featured Shin-chan meme template"
+                className="relative w-full max-w-[340px] sm:max-w-none sm:w-96 lg:w-[410px] rounded-3xl bg-white p-3 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_40px_rgba(37,99,235,0.3)] border border-white/80 rotate-0 hover:scale-[1.02] hover:shadow-[0_30px_70px_-15px_rgba(6,182,212,0.35)] transition-all duration-300 cursor-pointer group z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              >
                 <div className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-square">
                   <img
                     src="/shinchan-meme.jpg"
@@ -208,7 +227,19 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* DOWN IMAGE: ANGRY KAZAMA MEME CARD - Straight on mobile */}
-              <div className="absolute right-1 sm:-right-8 -bottom-4 sm:-bottom-7 w-38 sm:w-52 rounded-2xl bg-white p-2 sm:p-2.5 shadow-2xl shadow-rose-950/40 border-2 border-white rotate-0 sm:rotate-2 hover:rotate-0 hover:scale-105 sm:hover:scale-108 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-rose-500/30 transition-all duration-300 cursor-pointer group z-20">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={handleSelectStarter}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSelectStarter();
+                  }
+                }}
+                aria-label="Remix Kazama meme"
+                className="absolute right-1 sm:-right-8 -bottom-4 sm:-bottom-7 w-38 sm:w-52 rounded-2xl bg-white p-2 sm:p-2.5 shadow-2xl shadow-rose-950/40 border-2 border-white rotate-0 sm:rotate-2 hover:rotate-0 hover:scale-105 sm:hover:scale-108 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-rose-500/30 transition-all duration-300 cursor-pointer group z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+              >
                 {/* Comic Rage Emote Badge */}
                 <div className="absolute -top-3.5 -right-2 w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-md animate-bounce z-30">
                   💢
@@ -272,13 +303,13 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* ============================================================== */}
       {/* 2. STATS / METRICS BAR                                          */}
       {/* ============================================================== */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 relative z-30">
+      <Container size="lg" className="-mt-10 sm:-mt-12 relative z-30">
         <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-center">
           {/* Stat 1 */}
           <div className="flex items-center gap-3.5 justify-center sm:justify-start p-2 rounded-xl hover:bg-slate-50 hover:scale-105 transition-all duration-200 cursor-pointer group">
@@ -327,10 +358,10 @@ export const HomePage: React.FC = () => {
 
         {/* Live Community Pulse Ticker */}
         <CommunityLiveFeed />
-      </div>
+      </Container>
 
       {/* Main Page Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 space-y-20 sm:space-y-24">
+      <Container size="lg" className="py-12 sm:py-16 lg:py-20 space-y-16 sm:space-y-20 lg:space-y-24">
         {/* ============================================================== */}
         {/* 3. EVERYTHING YOU NEED SECTION                                 */}
         {/* ============================================================== */}
@@ -360,7 +391,7 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
               <a
-                href="#templates"
+                href="#create"
                 className="text-blue-600 text-sm font-bold flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-200"
               >
                 <span>→</span>
@@ -423,7 +454,7 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
               <a
-                href="#templates"
+                href="#create"
                 className="text-rose-600 text-sm font-bold flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-200"
               >
                 <span>→</span>
@@ -952,7 +983,7 @@ export const HomePage: React.FC = () => {
         {/* GRAND PRE-FOOTER COMMUNITY CTA BANNER                          */}
         {/* ============================================================== */}
         <CommunityBanner />
-      </div>
+      </Container>
 
       {/* Global Template Preview Modal (For Interactive Testing) */}
       <TemplatePreviewModal />

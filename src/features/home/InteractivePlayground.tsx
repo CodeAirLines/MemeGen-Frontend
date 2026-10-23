@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Sparkles, Download, Copy, Check, ArrowRight, Wand2, RefreshCw } from 'lucide-react';
+import { Sparkles, Download, Copy, Check, ArrowRight, Wand2, RefreshCw, ImageOff } from 'lucide-react';
 import { POPULAR_TEMPLATES } from '../../constants/templates';
+import type { MemeTemplate } from '../../types/template';
 import { useTemplateStore } from '../../stores/useTemplateStore';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
 
 const PRESET_IDEAS = [
   { top: 'When someone compliments my meme', bottom: "I'm not really that special..." },
@@ -14,16 +17,31 @@ const PRESET_IDEAS = [
 export const InteractivePlayground: React.FC = () => {
   const openPreview = useTemplateStore((state) => state.openPreview);
   const setSelectedTemplate = useTemplateStore((state) => state.setSelectedTemplate);
+  const selectedTemplate = useTemplateStore((state) => state.selectedTemplate);
 
-  const starterTemplates = POPULAR_TEMPLATES.slice(0, 5);
-  const [selectedTemplateIndex, setSelectedTemplateIndex] = useState(0);
+  const starterTemplates = POPULAR_TEMPLATES.slice(0, 6);
+  const [localTemplate, setLocalTemplate] = useState<MemeTemplate>(starterTemplates[0]);
+  const [prevTemplateId, setPrevTemplateId] = useState<string>(
+    selectedTemplate?.id || starterTemplates[0].id
+  );
+  const [imageError, setImageError] = useState(false);
   const [topText, setTopText] = useState('When someone compliments my meme');
   const [bottomText, setBottomText] = useState("I'm not really that special...");
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [isUppercase, setIsUppercase] = useState(true);
 
-  const activeTemplate = starterTemplates[selectedTemplateIndex] || starterTemplates[0];
+  const activeTemplate = selectedTemplate || localTemplate;
+
+  // Sync captions and reset error during render if the active template changed
+  if (activeTemplate.id !== prevTemplateId) {
+    setPrevTemplateId(activeTemplate.id);
+    setImageError(false);
+    if (activeTemplate.defaultTextSlots && activeTemplate.defaultTextSlots.length > 0) {
+      setTopText(activeTemplate.defaultTextSlots[0]?.placeholder || '');
+      setBottomText(activeTemplate.defaultTextSlots[1]?.placeholder || '');
+    }
+  }
 
   const handleCopy = () => {
     setCopied(true);
@@ -64,10 +82,30 @@ export const InteractivePlayground: React.FC = () => {
           ctx.fillText(renderText(bottomText), canvas.width / 2, canvas.height * 0.92);
         }
 
-        const link = document.createElement('a');
-        link.download = `${activeTemplate.id}-meme.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        // Draw clean MemeHub emoji watermark in bottom-right corner
+        const wmImg = new Image();
+        wmImg.crossOrigin = 'anonymous';
+        wmImg.src = '/logo-emoji.png';
+        wmImg.onload = () => {
+          const wmSize = Math.max(28, canvas.height * 0.065);
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.6)';
+          ctx.shadowBlur = 6;
+          ctx.globalAlpha = 0.9;
+          ctx.drawImage(wmImg, canvas.width - wmSize - 14, canvas.height - wmSize - 14, wmSize, wmSize);
+          ctx.restore();
+
+          const link = document.createElement('a');
+          link.download = `${activeTemplate.id}-meme.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        };
+        wmImg.onerror = () => {
+          const link = document.createElement('a');
+          link.download = `${activeTemplate.id}-meme.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        };
       }
       setTimeout(() => setDownloaded(false), 2000);
     };
@@ -89,7 +127,12 @@ export const InteractivePlayground: React.FC = () => {
   };
 
   return (
-    <section className="bg-slate-50/70 border border-slate-200/90 rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-sm" aria-label="Interactive Meme Playground">
+    <section
+      id="create"
+      className="scroll-mt-24 bg-slate-50/70 border border-slate-200/90 rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-sm"
+      aria-label="Interactive Meme Playground"
+    >
+      <div id="playground" className="sr-only" />
       {/* Background glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -112,11 +155,20 @@ export const InteractivePlayground: React.FC = () => {
         <div className="lg:col-span-6 flex flex-col items-center">
           <div className="relative w-full max-w-md bg-white rounded-2xl p-3 shadow-xl hover:shadow-2xl border border-slate-200 transition-shadow duration-300 group">
             <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-900">
-              <img
-                src={activeTemplate.imageUrl}
-                alt={activeTemplate.name}
-                className="w-full h-full object-cover select-none group-hover:scale-103 transition-transform duration-500"
-              />
+              {!imageError ? (
+                <img
+                  src={activeTemplate.imageUrl}
+                  alt={activeTemplate.name}
+                  onError={() => setImageError(true)}
+                  className="w-full h-full object-cover select-none group-hover:scale-103 transition-transform duration-500"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800 text-slate-300 p-6 text-center">
+                  <ImageOff className="w-12 h-12 text-slate-500 mb-2" />
+                  <p className="font-semibold text-sm text-white">{activeTemplate.name}</p>
+                  <p className="text-xs text-slate-400 mt-1">Image preview unavailable</p>
+                </div>
+              )}
 
               {/* Live Top Text */}
               {topText && (
@@ -145,40 +197,44 @@ export const InteractivePlayground: React.FC = () => {
               )}
 
               {/* Watermark Tag */}
-              <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/60 text-[9px] font-bold text-white/80 backdrop-blur-xs select-none">
-                MemeHub
+              <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/60 border border-white/10 backdrop-blur-xs flex items-center gap-1.5 select-none shadow-md">
+                <img src="/logo-emoji.png" alt="MemeHub" className="w-4 h-4 object-contain" />
+                <span className="text-[9px] font-bold text-white/80">MemeHub</span>
               </div>
             </div>
 
             {/* Canvas Actions Bar */}
             <div className="mt-3 flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
-              <button
-                type="button"
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={handleCopy}
-                className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer"
+                leftIcon={copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                className="flex-1"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied Link' : 'Copy'}</span>
-              </button>
+                {copied ? 'Copied Link' : 'Copy'}
+              </Button>
 
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={handleDownload}
-                className="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/40 active:scale-95 transition-all duration-200 cursor-pointer"
+                leftIcon={downloaded ? <Check className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
+                className="flex-1"
               >
-                {downloaded ? <Check className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
-                <span>{downloaded ? 'Saved!' : 'Download'}</span>
-              </button>
+                {downloaded ? 'Saved!' : 'Download'}
+              </Button>
 
-              <button
-                type="button"
+              <Button
+                variant="dark"
+                size="sm"
                 onClick={handleOpenStudio}
-                className="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-1 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer group/studio"
+                rightIcon={<ArrowRight className="w-3 h-3" />}
+                className="bg-slate-900 text-white hover:bg-slate-800"
                 title="Open in full studio"
               >
-                <span>Studio</span>
-                <ArrowRight className="w-3 h-3 group-hover/studio:translate-x-1 transition-transform" />
-              </button>
+                Studio
+              </Button>
             </div>
           </div>
         </div>
@@ -191,20 +247,35 @@ export const InteractivePlayground: React.FC = () => {
               1. Choose Starter Template
             </label>
             <div className="flex flex-wrap gap-2">
-              {starterTemplates.map((template, idx) => (
+              {starterTemplates.map((template) => {
+                const isActive = activeTemplate.id === template.id;
+                return (
+                  <button
+                    key={template.id}
+                    type="button"
+                    onClick={() => {
+                      setLocalTemplate(template);
+                      setSelectedTemplate(template);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${
+                      isActive
+                        ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    {template.name}
+                  </button>
+                );
+              })}
+
+              {!starterTemplates.some((t) => t.id === activeTemplate.id) && (
                 <button
-                  key={template.id}
                   type="button"
-                  onClick={() => setSelectedTemplateIndex(idx)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${
-                    selectedTemplateIndex === idx
-                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20'
-                      : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20"
                 >
-                  {template.name}
+                  {activeTemplate.name}
                 </button>
-              ))}
+              )}
             </div>
           </div>
 
@@ -224,12 +295,12 @@ export const InteractivePlayground: React.FC = () => {
                   <span>Random Joke Idea</span>
                 </button>
               </div>
-              <input
-                type="text"
+              <Input
+                variant="light"
+                inputSize="md"
                 value={topText}
                 onChange={(e) => setTopText(e.target.value)}
                 placeholder="TOP CAPTION GOES HERE..."
-                className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-xs"
               />
             </div>
 
@@ -237,12 +308,12 @@ export const InteractivePlayground: React.FC = () => {
               <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1.5">
                 Bottom Caption
               </label>
-              <input
-                type="text"
+              <Input
+                variant="light"
+                inputSize="md"
                 value={bottomText}
                 onChange={(e) => setBottomText(e.target.value)}
                 placeholder="BOTTOM CAPTION GOES HERE..."
-                className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-xs"
               />
             </div>
           </div>

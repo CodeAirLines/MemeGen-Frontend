@@ -1,16 +1,25 @@
-import React from 'react';
-import { Edit3, Layers, Maximize2, Tag, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Edit3, Layers, Maximize2, Tag, CheckCircle, ImageOff } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
 import { formatCompactNumber } from '../../lib/utils';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 
 export const TemplatePreviewModal: React.FC = () => {
+  const [imageError, setImageError] = useState(false);
+  const [prevTemplateId, setPrevTemplateId] = useState<string | null>(null);
   const isPreviewOpen = useTemplateStore((state) => state.isPreviewOpen);
   const previewTemplate = useTemplateStore((state) => state.previewTemplate);
   const closePreview = useTemplateStore((state) => state.closePreview);
   const setSelectedTemplate = useTemplateStore((state) => state.setSelectedTemplate);
   const selectedTemplate = useTemplateStore((state) => state.selectedTemplate);
+  const setSearchQuery = useTemplateStore((state) => state.setSearchQuery);
+
+  if (previewTemplate && previewTemplate.id !== prevTemplateId) {
+    setPrevTemplateId(previewTemplate.id);
+    setImageError(false);
+  }
 
   if (!previewTemplate) return null;
 
@@ -19,9 +28,18 @@ export const TemplatePreviewModal: React.FC = () => {
   const handleUseAndClose = () => {
     setSelectedTemplate(previewTemplate);
     closePreview();
-    const editorElem = document.getElementById('create');
+    const editorElem = document.getElementById('create') || document.getElementById('playground');
     if (editorElem) {
       editorElem.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleTagClick = (tag: string) => {
+    setSearchQuery(tag);
+    closePreview();
+    const gridElem = document.getElementById('templates');
+    if (gridElem) {
+      gridElem.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -36,11 +54,21 @@ export const TemplatePreviewModal: React.FC = () => {
       <div className="space-y-6">
         {/* Template Image Display */}
         <div className="relative rounded-xl overflow-hidden bg-slate-50 border border-slate-200/80 p-3 flex items-center justify-center min-h-[260px] max-h-[380px]">
-          <img
-            src={previewTemplate.imageUrl}
-            alt={previewTemplate.name}
-            className="w-auto h-auto max-w-full max-h-[350px] object-contain rounded-lg shadow-2xs"
-          />
+          {!imageError ? (
+            <img
+              src={previewTemplate.imageUrl}
+              alt={previewTemplate.name}
+              onError={() => setImageError(true)}
+              className="w-auto h-auto max-w-full max-h-[350px] object-contain rounded-lg shadow-2xs"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center p-8 text-center text-slate-400">
+              <ImageOff className="w-10 h-10 text-slate-300 mb-2" />
+              <p className="text-sm font-semibold text-slate-700">{previewTemplate.name}</p>
+              <p className="text-xs text-slate-400 mt-1">Image preview unavailable</p>
+            </div>
+          )}
+
           <div className="absolute top-3 right-3">
             <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/85 text-white backdrop-blur-md shadow-xs">
               {previewTemplate.width} × {previewTemplate.height} px
@@ -77,22 +105,30 @@ export const TemplatePreviewModal: React.FC = () => {
             <Tag className="w-3.5 h-3.5 text-blue-600" />
             <span>Search Tags:</span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {previewTemplate.tags.map((tag) => (
-              <span
+              <Badge
                 key={tag}
-                className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-blue-50/80 hover:bg-blue-100 text-blue-700 border border-blue-200/80 transition-colors cursor-pointer select-none shadow-2xs"
+                variant="primary"
+                size="sm"
+                onClick={() => handleTagClick(tag)}
+                className="cursor-pointer hover:bg-blue-200 transition-colors"
+                title={`Filter templates by #${tag}`}
               >
-                <span className="text-blue-400 font-bold mr-1">#</span>
-                {tag}
-              </span>
+                #{tag}
+              </Badge>
             ))}
           </div>
         </div>
 
         {/* Action Controls */}
         <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
-          <Button variant="ghost" size="md" onClick={closePreview} className="text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={closePreview}
+            className="text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          >
             Cancel
           </Button>
           <Button

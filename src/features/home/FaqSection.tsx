@@ -54,7 +54,8 @@ export const FaqSection: React.FC = () => {
   };
 
   return (
-    <section className="space-y-10" aria-label="Frequently Asked Questions">
+    <section id="faq" className="scroll-mt-24 space-y-10" aria-label="Frequently Asked Questions">
+      <div id="help" className="sr-only" />
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider">

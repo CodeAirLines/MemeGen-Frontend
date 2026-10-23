@@ -5,6 +5,7 @@ export interface NavLink {
 }
 
 export const MAIN_NAV_LINKS: NavLink[] = [
+  { label: 'Home', href: '#home' },
   { label: 'Create', href: '#create' },
   { label: 'Templates', href: '#templates' },
   { label: 'GIF Maker', href: '#gif-maker' },
@@ -13,6 +14,7 @@ export const MAIN_NAV_LINKS: NavLink[] = [
 ];
 
 export const FOOTER_PRODUCT_LINKS = [
+  { label: 'Home', href: '#home' },
   { label: 'Meme Generator', href: '#create' },
   { label: 'GIF Maker', href: '#gif-maker' },
   { label: 'AI Tools', href: '#ai-tools' },
