@@ -28,10 +28,8 @@ export const TemplatePreviewModal: React.FC = () => {
   const handleUseAndClose = () => {
     setSelectedTemplate(previewTemplate);
     closePreview();
-    const editorElem = document.getElementById('create') || document.getElementById('playground');
-    if (editorElem) {
-      editorElem.scrollIntoView({ behavior: 'smooth' });
-    }
+    window.history.pushState({}, '', '/editor');
+    window.dispatchEvent(new Event('popstate'));
   };
 
   const handleTagClick = (tag: string) => {

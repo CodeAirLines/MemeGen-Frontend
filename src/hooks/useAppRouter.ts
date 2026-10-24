@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-export type AppRoute = 'home' | 'login' | 'signup';
+export type AppRoute = 'home' | 'login' | 'signup' | 'editor';
 
 function getCurrentRoute(): AppRoute {
   if (typeof window === 'undefined') return 'home';
@@ -13,6 +13,9 @@ function getCurrentRoute(): AppRoute {
   }
   if (pathname === '/signup' || hash === '#signup') {
     return 'signup';
+  }
+  if (pathname === '/editor' || hash === '#editor' || pathname.startsWith('/editor')) {
+    return 'editor';
   }
 
   return 'home';
@@ -38,7 +41,7 @@ export function useAppRouter() {
   const navigate = useCallback((to: string) => {
     if (typeof window === 'undefined') return;
 
-    // Support both pathnames (/login, /signup, /) and hashes (#login, #signup, #home)
+    // Support pathnames (/login, /signup, /editor, /) and hashes (#login, #signup, #editor, #home)
     const normalized = to.toLowerCase();
 
     if (normalized === '/login' || normalized === '#login') {
@@ -48,6 +51,10 @@ export function useAppRouter() {
     } else if (normalized === '/signup' || normalized === '#signup') {
       window.history.pushState({}, '', '/signup');
       setRoute('signup');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (normalized === '/editor' || normalized === '#editor' || normalized.startsWith('/editor')) {
+      window.history.pushState({}, '', '/editor');
+      setRoute('editor');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (normalized === '/' || normalized === '#home') {
       window.history.pushState({}, '', '/');

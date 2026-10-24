@@ -337,12 +337,26 @@ export const InteractivePlayground: React.FC = () => {
             </span>
           </div>
 
-          {/* Helper hint */}
-          <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-100/80 text-xs text-blue-800 flex items-start gap-2">
-            <Sparkles className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <p>
-              Want to add custom stickers, drawings, multiple text layers, or upload your own photo? Click <strong>Studio</strong> to launch the advanced multi-track editor.
-            </p>
+          {/* Helper hint with Studio link */}
+          <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100/80 text-xs text-blue-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <p>
+                Want advanced text dragging, custom fonts, outlines, and multi-layer captions? Launch the <strong>Meme Studio Editor</strong>.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedTemplate(activeTemplate);
+                window.history.pushState({}, '', '/editor');
+                window.dispatchEvent(new Event('popstate'));
+              }}
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition-all cursor-pointer shrink-0"
+            >
+              <span>Open in Studio</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </div>
