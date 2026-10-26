@@ -7,11 +7,13 @@ import {
   Download,
   Edit2,
   Check,
-  Sparkles,
   Layers,
   Loader2,
+  Bookmark,
 } from 'lucide-react';
 import { useEditorStore } from '../../stores/useEditorStore';
+import { useDraftStore } from '../../stores/useDraftStore';
+import { useTemplateStore } from '../../stores/useTemplateStore';
 
 interface EditorToolbarProps {
   onBack: () => void;
@@ -22,6 +24,10 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
   const memeTitle = useEditorStore((state) => state.memeTitle);
   const setMemeTitle = useEditorStore((state) => state.setMemeTitle);
   const activeTemplate = useEditorStore((state) => state.activeTemplate);
+  const textLayers = useEditorStore((state) => state.textLayers);
+  const canvasSettings = useEditorStore((state) => state.canvasSettings);
+  const currentDraftId = useEditorStore((state) => state.currentDraftId);
+  const setCurrentDraftId = useEditorStore((state) => state.setCurrentDraftId);
   const canUndo = useEditorStore((state) => state.history.past.length > 0);
   const canRedo = useEditorStore((state) => state.history.future.length > 0);
   const undo = useEditorStore((state) => state.undo);
@@ -29,6 +35,10 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
   const setIsResetModalOpen = useEditorStore((state) => state.setIsResetModalOpen);
   const setIsTemplatePickerOpen = useEditorStore((state) => state.setIsTemplatePickerOpen);
   const isExporting = useEditorStore((state) => state.isExporting);
+
+  const saveDraft = useDraftStore((state) => state.saveDraft);
+  const setNotification = useTemplateStore((state) => state.setNotification);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
 
   // Inline editing state for Meme Title
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -61,28 +71,54 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
     }
   };
 
+  const handleSaveDraft = async () => {
+    if (!activeTemplate || isSavingDraft) return;
+    setIsSavingDraft(true);
+    try {
+      const saved = await saveDraft(
+        memeTitle || activeTemplate.name,
+        activeTemplate,
+        textLayers,
+        canvasSettings,
+        currentDraftId
+      );
+      setCurrentDraftId(saved.id);
+      setNotification({
+        type: 'success',
+        message: `Draft "${saved.title}" saved successfully!`,
+      });
+    } catch {
+      setNotification({
+        type: 'info',
+        message: 'Could not save draft. Please try again.',
+      });
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
+
   return (
-    <header className="w-full bg-[#071330] border-b border-white/10 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3 text-white z-30 shrink-0">
+    <header className="w-full bg-[#071330] border-b border-white/10 px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-3 text-white z-30 shrink-0">
       {/* Left: Back & Title */}
-      <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
         {/* Back Button */}
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors text-xs sm:text-sm font-semibold cursor-pointer shrink-0"
+          className="flex items-center justify-center gap-1.5 p-2 sm:px-2.5 sm:py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors text-xs sm:text-sm font-semibold cursor-pointer shrink-0 min-w-[36px] min-h-[36px]"
           title="Back to Gallery / Home"
           aria-label="Back to Gallery"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 shrink-0" />
           <span className="hidden md:inline">Back</span>
         </button>
 
         <div className="h-5 w-[1px] bg-white/15 hidden sm:block shrink-0" />
 
         {/* Meme Title (Inline Editable) */}
-        <div className="flex items-center gap-2 min-w-0">
+        <div className="flex items-center gap-1.5 min-w-0 flex-1">
           {isEditingTitle ? (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 min-w-0 flex-1">
               <input
                 ref={inputRef}
                 type="text"
@@ -90,13 +126,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
                 onChange={(e) => setLocalTitle(e.target.value)}
                 onBlur={handleSaveTitle}
                 onKeyDown={handleKeyDown}
-                className="bg-slate-900 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded-lg border border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-400 w-36 sm:w-56"
+                className="bg-slate-900 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded-lg border border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-400 w-full max-w-[140px] sm:max-w-xs"
                 maxLength={60}
               />
               <button
                 type="button"
                 onClick={handleSaveTitle}
-                className="p-1 text-emerald-400 hover:bg-emerald-500/20 rounded-md cursor-pointer"
+                className="p-1 text-emerald-400 hover:bg-emerald-500/20 rounded-md cursor-pointer shrink-0"
                 title="Save title"
               >
                 <Check className="w-4 h-4" />
@@ -108,10 +144,10 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
                 setLocalTitle(memeTitle);
                 setIsEditingTitle(true);
               }}
-              className="group flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-lg hover:bg-white/5 transition-colors min-w-0"
+              className="group flex items-center gap-1 cursor-pointer px-1.5 py-1 rounded-lg hover:bg-white/5 transition-colors min-w-0 max-w-[110px] xs:max-w-[150px] sm:max-w-[240px] md:max-w-[320px]"
               title="Click to rename meme"
             >
-              <h1 className="text-xs sm:text-sm md:text-base font-extrabold text-white truncate max-w-[130px] sm:max-w-[240px] md:max-w-[320px]">
+              <h1 className="text-xs sm:text-sm md:text-base font-extrabold text-white truncate">
                 {memeTitle || 'Untitled Meme'}
               </h1>
               <Edit2 className="w-3 h-3 text-slate-400 group-hover:text-cyan-300 shrink-0 transition-colors" />
@@ -134,17 +170,17 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
       </div>
 
       {/* Right: History, Reset, Template Switch & Export Actions */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 shrink-0">
         {/* Undo Button */}
         <button
           type="button"
           onClick={undo}
           disabled={!canUndo}
-          className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer flex items-center gap-1 text-xs font-medium"
+          className="p-1.5 xs:p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-medium"
           title="Undo (Ctrl+Z)"
           aria-label="Undo last change"
         >
-          <Undo2 className="w-4 h-4" />
+          <Undo2 className="w-4 h-4 shrink-0" />
           <span className="hidden xl:inline">Undo</span>
         </button>
 
@@ -153,11 +189,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
           type="button"
           onClick={redo}
           disabled={!canRedo}
-          className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer flex items-center gap-1 text-xs font-medium"
+          className="p-1.5 xs:p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-medium"
           title="Redo (Ctrl+Y)"
           aria-label="Redo last change"
         >
-          <Redo2 className="w-4 h-4" />
+          <Redo2 className="w-4 h-4 shrink-0" />
           <span className="hidden xl:inline">Redo</span>
         </button>
 
@@ -165,11 +201,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
         <button
           type="button"
           onClick={() => setIsResetModalOpen(true)}
-          className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-white/10 text-slate-300 hover:text-rose-300 hover:border-rose-500/40 hover:bg-rose-500/10 transition-all cursor-pointer flex items-center gap-1 text-xs font-medium"
+          className="p-1.5 xs:p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-white/10 text-slate-300 hover:text-rose-300 hover:border-rose-500/40 hover:bg-rose-500/10 transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-medium"
           title="Reset Meme to Default"
           aria-label="Reset meme to template defaults"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-4 h-4 shrink-0" />
           <span className="hidden lg:inline">Reset</span>
         </button>
 
@@ -177,11 +213,28 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
         <button
           type="button"
           onClick={() => setIsTemplatePickerOpen(true)}
-          className="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-blue-500/30 bg-blue-600/15 text-blue-200 hover:bg-blue-600/25 transition-all cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
+          className="p-1.5 xs:p-2 sm:px-3 sm:py-1.5 rounded-xl border border-blue-500/30 bg-blue-600/15 text-blue-200 hover:bg-blue-600/25 transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-semibold"
           title="Change Template"
         >
-          <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+          <Layers className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
           <span className="hidden sm:inline">Templates</span>
+        </button>
+
+        {/* Save Draft Button */}
+        <button
+          type="button"
+          onClick={handleSaveDraft}
+          disabled={isSavingDraft}
+          className="p-1.5 xs:p-2 sm:px-3 sm:py-1.5 rounded-xl border border-white/10 hover:border-cyan-400/50 bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-semibold gap-1.5"
+          title="Save to My Drafts"
+          aria-label="Save draft"
+        >
+          {isSavingDraft ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+          ) : (
+            <Bookmark className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+          )}
+          <span className="hidden md:inline">Save Draft</span>
         </button>
 
         {/* Download / Export Primary Button */}
@@ -189,17 +242,17 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
           type="button"
           onClick={onExport}
           disabled={isExporting}
-          className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 disabled:opacity-60 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 cursor-pointer ml-1"
+          className="px-2.5 xs:px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 disabled:opacity-60 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 cursor-pointer min-h-[34px] shrink-0"
           aria-label="Export meme as PNG image"
         >
           {isExporting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-white" />
-              <span>Exporting...</span>
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-white" />
+              <span className="hidden xs:inline">Exporting...</span>
             </>
           ) : (
             <>
-              <Download className="w-4 h-4" />
+              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Download</span>
             </>
           )}

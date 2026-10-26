@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Edit3, ImageOff } from 'lucide-react';
+import { Edit3, ImageOff } from 'lucide-react';
 import type { MemeTemplate } from '../../types/template';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 import { formatCompactNumber } from '../../lib/utils';
@@ -74,23 +74,23 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
       </div>
 
       {/* Title & Metadata */}
-      <div className="p-2.5 flex flex-col justify-between gap-1 bg-white flex-1">
-        <div className="flex items-start justify-between gap-1">
+      <div className="p-2 sm:p-2.5 flex flex-col justify-between gap-1 bg-white flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-1 min-w-0">
           <h3
-            className="font-semibold text-slate-900 text-xs sm:text-[13px] line-clamp-1 group-hover:text-blue-600 transition-colors"
+            className="font-semibold text-slate-900 text-xs sm:text-[13px] truncate min-w-0 flex-1 group-hover:text-blue-600 transition-colors"
             title={template.name}
           >
             {template.name}
           </h3>
-          {isSelected && <Sparkles className="w-3 h-3 text-blue-600 shrink-0 mt-0.5" />}
+          {isSelected && <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1" />}
         </div>
 
-        <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
-          <span className="capitalize font-medium text-slate-500 truncate max-w-[100px]">
+        <div className="flex items-center justify-between gap-1 text-[11px] text-slate-400 pt-0.5 min-w-0">
+          <span className="capitalize font-medium text-slate-500 truncate min-w-0">
             {template.category}
           </span>
-          <span className="text-[10px] font-mono text-slate-400">
-            {formatCompactNumber(template.usageCount)} uses
+          <span className="text-[10px] font-mono text-slate-400 shrink-0">
+            {formatCompactNumber(template.usageCount)}
           </span>
         </div>
       </div>

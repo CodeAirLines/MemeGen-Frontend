@@ -45,9 +45,9 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     };
 
     const sizeStyles = {
-      sm: 'h-9 text-xs pl-9',
-      md: 'h-10 text-xs sm:text-sm pl-10',
-      lg: 'h-12 text-sm sm:text-base pl-11',
+      sm: 'h-9 text-base sm:text-xs pl-9',
+      md: 'h-10 text-base sm:text-sm pl-10',
+      lg: 'h-12 text-base pl-11',
     };
 
     const iconSizes = {
@@ -103,7 +103,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
               onClick={onClear}
               aria-label="Clear search"
               className={cn(
-                'p-1 rounded-full hover:scale-110 active:scale-95 transition-all cursor-pointer',
+                'w-7 h-7 flex items-center justify-center rounded-full hover:scale-110 active:scale-95 transition-all cursor-pointer',
                 variant === 'dark'
                   ? 'text-slate-400 hover:text-white hover:bg-white/10'
                   : 'text-slate-400 hover:text-slate-700 hover:bg-slate-200/80'

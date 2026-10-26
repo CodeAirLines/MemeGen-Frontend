@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { TextLayer, CanvasSettings, EditorHistoryEntry } from '../types/editor';
 import type { MemeTemplate } from '../types/template';
+import type { MemeDraft } from '../types/draft';
 import { POPULAR_TEMPLATES } from '../constants/templates';
 
 const MAX_HISTORY = 30;
@@ -79,9 +80,12 @@ interface EditorStoreState {
   exportFormat: 'png' | 'jpeg' | 'webp';
   isResetModalOpen: boolean;
   isTemplatePickerOpen: boolean;
+  currentDraftId: string | null;
 
   // Actions
   loadTemplate: (template: MemeTemplate, preserveCustomText?: boolean) => void;
+  loadDraft: (draft: MemeDraft) => void;
+  setCurrentDraftId: (id: string | null) => void;
   setMemeTitle: (title: string) => void;
   addTextLayer: (preset?: Partial<TextLayer>) => string;
   updateTextLayer: (id: string, updates: Partial<TextLayer>, recordHistory?: boolean) => void;
@@ -130,6 +134,7 @@ export const useEditorStore = create<EditorStoreState>((set, get) => {
     exportFormat: 'png',
     isResetModalOpen: false,
     isTemplatePickerOpen: false,
+    currentDraftId: null,
 
     loadTemplate: (template, preserveCustomText = false) => {
       const state = get();
@@ -142,12 +147,35 @@ export const useEditorStore = create<EditorStoreState>((set, get) => {
         memeTitle: `${template.name} Meme`,
         textLayers: currentLayers,
         selectedLayerId: currentLayers[0]?.id || null,
+        currentDraftId: null,
         history: {
           past: [],
           future: [],
         },
       });
     },
+
+    loadDraft: (draft) => {
+      set({
+        activeTemplate: draft.template,
+        memeTitle: draft.title,
+        textLayers: JSON.parse(JSON.stringify(draft.textLayers)),
+        selectedLayerId: draft.textLayers[0]?.id || null,
+        currentDraftId: draft.id,
+        canvasSettings: draft.canvasSettings
+          ? { ...get().canvasSettings, ...draft.canvasSettings }
+          : get().canvasSettings,
+        history: {
+          past: [],
+          future: [],
+        },
+      });
+    },
+
+    setCurrentDraftId: (id) => {
+      set({ currentDraftId: id });
+    },
+
 
     setMemeTitle: (title) => {
       set({ memeTitle: title });

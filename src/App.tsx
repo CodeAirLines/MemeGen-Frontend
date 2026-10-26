@@ -4,8 +4,12 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { EditorPage } from './pages/EditorPage';
-import { Auth3DScene } from './features/auth/Auth3DScene';
+import { ProfilePage } from './pages/ProfilePage';
+import { DraftsPage } from './pages/DraftsPage';
+import { GifGeneratorPage } from './pages/GifGeneratorPage';
+import { AuthModal } from './features/auth/AuthModal';
 import { useTemplateStore } from './stores/useTemplateStore';
+import { useAuthStore } from './stores/useAuthStore';
 import { IconButton } from './components/ui/IconButton';
 import { useAppRouter } from './hooks/useAppRouter';
 
@@ -13,6 +17,22 @@ export const App: React.FC = () => {
   const { route, navigate } = useAppRouter();
   const notification = useTemplateStore((state) => state.notification);
   const setNotification = useTemplateStore((state) => state.setNotification);
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthLoading = useAuthStore((state) => state.isLoading);
+  const initializeSession = useAuthStore((state) => state.initializeSession);
+
+  // Initialize and restore authentication session on mount
+  useEffect(() => {
+    initializeSession();
+  }, [initializeSession]);
+
+  // Protect private routes: Profile and Drafts require confirmed authentication
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated && (route === 'profile' || route === 'drafts')) {
+      navigate('/login', { preserveScroll: true });
+    }
+  }, [route, isAuthenticated, isAuthLoading, navigate]);
 
   // Auto-dismiss notification toast after 4 seconds
   useEffect(() => {
@@ -23,14 +43,7 @@ export const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, [notification, setNotification]);
 
-  // Dedicated cinematic 3D authentication scene for Login & Sign Up
-  if (route === 'login' || route === 'signup') {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white">
-        <Auth3DScene initialMode={route} onNavigate={navigate} />
-      </div>
-    );
-  }
+  const isAuthModalOpen = route === 'login' || route === 'signup';
 
   // Dedicated Meme Editor View
   if (route === 'editor') {
@@ -42,7 +55,7 @@ export const App: React.FC = () => {
           <aside
             role="status"
             aria-live="polite"
-            className="fixed bottom-6 right-4 sm:right-6 z-50 max-w-sm w-full bg-[#071330]/95 text-white p-3.5 rounded-2xl border border-blue-500/30 shadow-[0_12px_36px_-6px_rgba(0,0,0,0.6)] backdrop-blur-xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-3 duration-200"
+            className="fixed bottom-[calc(1.5rem+var(--sab))] left-4 right-4 sm:left-auto sm:right-6 z-50 max-w-sm sm:w-full bg-[#071330]/95 text-white p-3.5 rounded-2xl border border-blue-500/30 shadow-[0_12px_36px_-6px_rgba(0,0,0,0.6)] backdrop-blur-xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-3 duration-200"
           >
             <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium">
               {notification.type === 'success' ? (
@@ -87,7 +100,7 @@ export const App: React.FC = () => {
         <aside
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-4 sm:right-6 z-50 max-w-sm w-full bg-[#071330]/95 text-white p-3.5 rounded-2xl border border-blue-500/30 shadow-[0_12px_36px_-6px_rgba(0,0,0,0.6)] backdrop-blur-xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-3 duration-200"
+          className="fixed bottom-[calc(1.5rem+var(--sab))] left-4 right-4 sm:left-auto sm:right-6 z-50 max-w-sm sm:w-full bg-[#071330]/95 text-white p-3.5 rounded-2xl border border-blue-500/30 shadow-[0_12px_36px_-6px_rgba(0,0,0,0.6)] backdrop-blur-xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-3 duration-200"
         >
           <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium">
             {notification.type === 'success' ? (
@@ -112,11 +125,35 @@ export const App: React.FC = () => {
 
       {/* Main Page Content */}
       <main id="main-content" className="flex-1 w-full">
-        <HomePage />
+        {route === 'profile' ? (
+          isAuthenticated ? (
+            <ProfilePage onNavigate={navigate} />
+          ) : (
+            <HomePage onNavigate={navigate} />
+          )
+        ) : route === 'drafts' ? (
+          isAuthenticated ? (
+            <DraftsPage onNavigate={navigate} />
+          ) : (
+            <HomePage onNavigate={navigate} />
+          )
+        ) : route === 'gif-generator' ? (
+          <GifGeneratorPage onNavigate={navigate} />
+        ) : (
+          <HomePage onNavigate={navigate} />
+        )}
       </main>
 
       {/* Global Footer */}
       <Footer onNavigate={navigate} />
+
+      {/* Centered Authentication Modal Overlay */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        initialMode={route === 'signup' ? 'signup' : 'login'}
+        onClose={() => navigate('/', { preserveScroll: true })}
+        onNavigate={navigate}
+      />
     </div>
   );
 };

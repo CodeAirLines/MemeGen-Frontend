@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, Award, Heart, ThumbsUp, CheckCircle2, Sparkles } from 'lucide-react';
+import { Trophy, Award, Heart, ThumbsUp, CheckCircle2 } from 'lucide-react';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 import { POPULAR_TEMPLATES } from '../../constants/templates';
 
@@ -60,16 +60,16 @@ export const WeeklyContest: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/15 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Top Banner Tag */}
-      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-white/10">
-        <div className="space-y-1.5 text-left">
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-white/10 text-center md:text-left">
+        <div className="space-y-1.5 flex flex-col items-center md:items-start">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider border border-amber-400/30">
             <Trophy className="w-3.5 h-3.5" />
             <span>Weekly Creator Challenge</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight text-center md:text-left">
             Hall of Fame & Community Contest
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 font-normal">
+          <p className="text-xs sm:text-sm text-slate-300 font-normal text-center md:text-left">
             Every week 2M+ members vote on the best community memes. Win creator cash prizes and get verified.
           </p>
         </div>
@@ -77,9 +77,9 @@ export const WeeklyContest: React.FC = () => {
         <button
           type="button"
           onClick={handleEnterContest}
-          className="self-start md:self-auto bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg shadow-amber-400/20 flex items-center gap-2 transition-all cursor-pointer active:scale-95"
+          className="self-center md:self-auto bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg shadow-amber-400/20 flex items-center gap-2 transition-all cursor-pointer active:scale-95"
         >
-          <Sparkles className="w-4 h-4" />
+          <Trophy className="w-4 h-4" />
           <span>Enter Next Week's Contest</span>
         </button>
       </div>
@@ -142,7 +142,7 @@ export const WeeklyContest: React.FC = () => {
             <button
               type="button"
               onClick={handleVote}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ${
+              className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer min-h-[44px] ${
                 voted
                   ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
                   : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'

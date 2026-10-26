@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Bell, Menu, X } from 'lucide-react';
+import { Bell, Menu, X, User, Bookmark, LogOut, ChevronDown } from 'lucide-react';
 import { MAIN_NAV_LINKS } from '../../constants/navigation';
 import { SearchInput } from '../ui/SearchInput';
 import { IconButton } from '../ui/IconButton';
 import { Button } from '../ui/Button';
 import { useTemplateStore } from '../../stores/useTemplateStore';
+import { useProfileStore } from '../../stores/useProfileStore';
+import { useAuthStore } from '../../stores/useAuthStore';
 
 export interface HeaderProps {
   onNavigate?: (route: string) => void;
@@ -12,9 +14,22 @@ export interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const searchQuery = useTemplateStore((state) => state.searchQuery);
   const setSearchQuery = useTemplateStore((state) => state.setSearchQuery);
+  const profile = useProfileStore((state) => state.profile);
+  const fetchProfile = useProfileStore((state) => state.fetchProfile);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const authUser = useAuthStore((state) => state.user);
+  const isDemoMode = useAuthStore((state) => state.isDemoMode);
+  const logout = useAuthStore((state) => state.logout);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchProfile();
+    }
+  }, [fetchProfile, isAuthenticated]);
 
   const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -84,29 +99,29 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <header className="fixed top-2.5 sm:top-4 inset-x-0 z-50 w-full px-3 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300">
+    <header className="fixed top-2 sm:top-4 inset-x-0 z-50 w-full px-2.5 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300">
       {/* Floating Island Container */}
       <div
-        className={`pointer-events-auto max-w-7xl mx-auto rounded-2xl lg:rounded-full bg-[#071330]/85 backdrop-blur-xl border transition-all duration-300 px-3.5 sm:px-6 ${
+        className={`pointer-events-auto max-w-7xl mx-auto rounded-2xl lg:rounded-full bg-[#071330]/85 backdrop-blur-xl border transition-all duration-300 px-3 sm:px-6 ${
           isScrolled
             ? 'py-2 sm:py-2.5 border-blue-500/30 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.6),0_0_30px_rgba(37,99,235,0.25)] bg-[#071330]/90'
-            : 'py-2.5 sm:py-3.5 border-white/15 shadow-[0_12px_36px_-10px_rgba(0,0,0,0.5),0_0_20px_rgba(37,99,235,0.15)] hover:border-blue-400/35 hover:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.65),0_0_28px_rgba(6,182,212,0.2)]'
+            : 'py-2 sm:py-3.5 border-white/15 shadow-[0_12px_36px_-10px_rgba(0,0,0,0.5),0_0_20px_rgba(37,99,235,0.15)] hover:border-blue-400/35 hover:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.65),0_0_28px_rgba(6,182,212,0.2)]'
         }`}
       >
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
           {/* Left: Brand Logo & Main Nav */}
-          <div className="flex items-center gap-4 xl:gap-7">
+          <div className="flex items-center gap-3 xl:gap-7 min-w-0">
             {/* Logo - logo.png only */}
             <a
               href="#home"
               onClick={() => setActiveHash('#home')}
-              className="flex items-center group cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-200 select-none py-0.5"
+              className="flex items-center group cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-200 select-none py-0.5 shrink-0"
               aria-label="MemeHub Home"
             >
               <img
                 src="/logo.png"
                 alt="MemeHub"
-                className="h-8 sm:h-9 md:h-10 w-auto object-contain filter drop-shadow-[0_2px_14px_rgba(37,99,235,0.45)] group-hover:drop-shadow-[0_4px_22px_rgba(6,182,212,0.7)] transition-all duration-300"
+                className="h-7 sm:h-9 md:h-10 w-auto object-contain filter drop-shadow-[0_2px_14px_rgba(37,99,235,0.45)] group-hover:drop-shadow-[0_4px_22px_rgba(6,182,212,0.7)] transition-all duration-300"
               />
             </a>
 
@@ -118,7 +133,13 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   <a
                     key={link.label}
                     href={link.href}
-                    onClick={() => setActiveHash(link.href)}
+                    onClick={(e) => {
+                      setActiveHash(link.href);
+                      if (link.href === '#gif-maker' && onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/gif-maker');
+                      }
+                    }}
                     className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-medium transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-white/15 shadow-xs font-semibold'
@@ -159,38 +180,180 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
               <Bell className="w-3.5 h-3.5" />
             </IconButton>
 
-            {/* Log In */}
-            <a
-              href="#login"
-              onClick={(e) => {
-                if (onNavigate) {
-                  e.preventDefault();
-                  onNavigate('/login');
-                }
-              }}
-              className="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white px-3 py-1.5 rounded-full hover:bg-white/5 transition-all duration-200 cursor-pointer"
-            >
-              Log In
-            </a>
+            {/* Authenticated Controls: My Drafts & Instagram-style Profile Menu */}
+            {isAuthenticated ? (
+              <>
+                {/* My Drafts Link */}
+                <a
+                  href="#drafts"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate('/drafts');
+                    }
+                  }}
+                  className="text-xs font-semibold text-slate-200 hover:text-white px-2.5 py-1.5 rounded-full hover:bg-white/10 transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+                  title="My Saved Drafts"
+                >
+                  <Bookmark className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="hidden xl:inline">Drafts</span>
+                </a>
 
-            {/* Sign Up */}
-            <a
-              href="#signup"
-              onClick={(e) => {
-                if (onNavigate) {
-                  e.preventDefault();
-                  onNavigate('/signup');
-                }
-              }}
-            >
-              <Button
-                variant="primary"
-                size="sm"
-                className="rounded-full shadow-md shadow-blue-600/30 hover:shadow-cyan-500/30 font-semibold"
-              >
-                Sign Up
-              </Button>
-            </a>
+                {/* Profile Avatar Dropdown Entry */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setProfileDropdownOpen((prev) => !prev)}
+                    className="flex items-center gap-2 p-1 sm:pl-1.5 sm:pr-2.5 sm:py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 transition-all duration-200 cursor-pointer group shrink-0"
+                    aria-expanded={profileDropdownOpen}
+                    aria-haspopup="true"
+                    aria-label="User profile menu"
+                  >
+                    <div className="w-6.5 h-6.5 rounded-full overflow-hidden shrink-0 border border-white/20 shadow-xs flex items-center justify-center bg-slate-800">
+                      <img
+                        src={profile?.avatarUrl || authUser?.avatarUrl || '/Profille/no-dp_16.webp'}
+                        alt={profile?.displayName || authUser?.fullName || 'User'}
+                        className="w-full h-full object-cover rounded-full"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/Profille/no-dp_16.webp';
+                        }}
+                      />
+                    </div>
+                    <span className="hidden lg:inline text-xs font-semibold text-slate-200 group-hover:text-white truncate max-w-[85px]">
+                      {profile?.displayName?.split(' ')[0] ||
+                        authUser?.fullName?.split(' ')[0] ||
+                        'Profile'}
+                    </span>
+                    <ChevronDown
+                      className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${
+                        profileDropdownOpen ? 'rotate-180 text-white' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {profileDropdownOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        aria-hidden="true"
+                      />
+                      <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-[#071330]/95 backdrop-blur-xl border border-white/15 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.7)] p-2 z-50 text-slate-200 animate-in fade-in zoom-in-95 duration-150">
+                        {/* User Header */}
+                        <div className="px-3 py-2.5 border-b border-white/10 flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/15 flex items-center justify-center bg-slate-800">
+                            <img
+                              src={profile?.avatarUrl || authUser?.avatarUrl || '/Profille/no-dp_16.webp'}
+                              alt=""
+                              className="w-full h-full object-cover rounded-full"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).src = '/Profille/no-dp_16.webp';
+                              }}
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="font-bold text-sm text-white truncate">
+                              {profile?.displayName || authUser?.fullName || 'Meme Creator'}
+                            </div>
+                            <div className="text-xs text-cyan-400 truncate">
+                              @{profile?.username || authUser?.email.split('@')[0] || 'creator'}
+                            </div>
+                            {isDemoMode && (
+                              <span className="inline-block mt-0.5 text-[10px] font-semibold text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 px-1.5 py-0.5 rounded-md">
+                                Demo Creator Account
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Navigation items */}
+                        <div className="py-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfileDropdownOpen(false);
+                              if (onNavigate) onNavigate('/profile');
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                          >
+                            <User className="w-4 h-4 text-cyan-400" />
+                            <span>My Profile</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfileDropdownOpen(false);
+                              if (onNavigate) onNavigate('/drafts');
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                          >
+                            <Bookmark className="w-4 h-4 text-cyan-400" />
+                            <span>My Saved Drafts</span>
+                          </button>
+                        </div>
+
+                        {/* Logout item */}
+                        <div className="pt-1 border-t border-white/10">
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              setProfileDropdownOpen(false);
+                              await logout();
+                              if (onNavigate) onNavigate('/');
+                              useTemplateStore.getState().setNotification({
+                                type: 'info',
+                                message: 'You have been logged out.',
+                              });
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-xl text-rose-300 hover:text-rose-100 hover:bg-rose-950/40 transition-colors cursor-pointer text-left"
+                          >
+                            <LogOut className="w-4 h-4 text-rose-400" />
+                            <span>Log Out</span>
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Unauthenticated: Log In */}
+                <a
+                  href="#login"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate('/login');
+                    }
+                  }}
+                  className="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white px-2.5 py-1.5 rounded-full hover:bg-white/5 transition-all duration-200 cursor-pointer"
+                >
+                  Log In
+                </a>
+
+                {/* Unauthenticated: Sign Up */}
+                <a
+                  href="#signup"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate('/signup');
+                    }
+                  }}
+                >
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="rounded-full shadow-md shadow-blue-600/30 hover:shadow-cyan-500/30 font-semibold"
+                  >
+                    Sign Up
+                  </Button>
+                </a>
+              </>
+            )}
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -202,7 +365,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation-drawer"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              className="rounded-xl"
+              className="rounded-xl min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-slate-200" />}
             </IconButton>
@@ -225,7 +388,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             id="mobile-navigation-drawer"
             role="navigation"
             aria-label="Mobile navigation"
-            className="pointer-events-auto relative z-50 md:hidden max-w-7xl mx-auto mt-2 rounded-2xl bg-[#071330]/95 backdrop-blur-2xl border border-white/15 shadow-2xl p-4 space-y-4 animate-in slide-in-from-top-2 duration-200"
+            className="pointer-events-auto relative z-50 md:hidden max-w-7xl mx-auto mt-2 rounded-2xl bg-[#071330]/95 backdrop-blur-2xl border border-white/15 shadow-2xl p-4 space-y-4 animate-in slide-in-from-top-2 duration-200 max-h-[calc(100dvh-5.5rem)] overflow-y-auto overscroll-contain pb-safe"
           >
             {/* Mobile Brand Row */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
@@ -244,7 +407,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                 size="sm"
                 onClick={closeMobileMenu}
                 aria-label="Close menu"
-                className="rounded-lg text-slate-400 hover:text-white"
+                className="rounded-lg text-slate-400 hover:text-white min-w-[40px] min-h-[40px] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </IconButton>
@@ -273,9 +436,13 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   <a
                     key={link.label}
                     href={link.href}
-                    onClick={() => {
+                    onClick={(e) => {
                       setActiveHash(link.href);
                       closeMobileMenu();
+                      if (link.href === '#gif-maker' && onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/gif-maker');
+                      }
                     }}
                     className={`px-3.5 py-3 text-sm font-medium rounded-xl transition-colors min-h-[44px] flex items-center ${
                       isActive
@@ -287,37 +454,109 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   </a>
                 );
               })}
-            </nav>
 
-            {/* Mobile Auth Buttons */}
-            <div className="pt-2 flex items-center gap-3">
-              <a
-                href="#login"
-                onClick={(e) => {
-                  closeMobileMenu();
-                  if (onNavigate) {
-                    e.preventDefault();
-                    onNavigate('/login');
-                  }
-                }}
-                className="flex-1 text-center py-2.5 text-sm font-medium text-slate-200 border border-white/15 rounded-xl hover:bg-white/10 transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
-              >
-                Log In
-              </a>
-              <a
-                href="#signup"
-                onClick={(e) => {
-                  closeMobileMenu();
-                  if (onNavigate) {
-                    e.preventDefault();
-                    onNavigate('/signup');
-                  }
-                }}
-                className="flex-1 text-center py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl hover:from-blue-500 hover:to-cyan-400 shadow-md shadow-blue-600/30 min-h-[44px] flex items-center justify-center cursor-pointer"
-              >
-                Sign Up
-              </a>
-            </div>
+              {/* Authenticated User in Mobile Drawer */}
+              {isAuthenticated ? (
+                <div className="pt-2 border-t border-white/10 space-y-1">
+                  <div className="px-3.5 py-2.5 flex items-center gap-3 bg-white/5 rounded-xl border border-white/10">
+                    <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border border-white/15 flex items-center justify-center bg-slate-800 shadow-xs">
+                      <img
+                        src={profile?.avatarUrl || authUser?.avatarUrl || '/Profille/no-dp_16.webp'}
+                        alt=""
+                        className="w-full h-full object-cover rounded-full"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/Profille/no-dp_16.webp';
+                        }}
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-bold text-white truncate">
+                        {profile?.displayName || authUser?.fullName || 'Meme Creator'}
+                      </p>
+                      <p className="text-xs text-cyan-400 truncate">
+                        @{profile?.username || authUser?.email.split('@')[0] || 'creator'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <a
+                    href="#profile"
+                    onClick={(e) => {
+                      closeMobileMenu();
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/profile');
+                      }
+                    }}
+                    className="px-3.5 py-3 text-sm font-medium rounded-xl text-slate-200 hover:text-cyan-300 hover:bg-white/10 flex items-center gap-2.5 min-h-[44px]"
+                  >
+                    <User className="w-4 h-4 text-cyan-400" />
+                    <span>My Profile</span>
+                  </a>
+                  <a
+                    href="#drafts"
+                    onClick={(e) => {
+                      closeMobileMenu();
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/drafts');
+                      }
+                    }}
+                    className="px-3.5 py-3 text-sm font-medium rounded-xl text-slate-200 hover:text-cyan-300 hover:bg-white/10 flex items-center gap-2.5 min-h-[44px]"
+                  >
+                    <Bookmark className="w-4 h-4 text-cyan-400" />
+                    <span>My Drafts</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      closeMobileMenu();
+                      await logout();
+                      if (onNavigate) onNavigate('/');
+                      useTemplateStore.getState().setNotification({
+                        type: 'info',
+                        message: 'You have been logged out.',
+                      });
+                    }}
+                    className="w-full px-3.5 py-3 text-sm font-medium rounded-xl text-rose-300 hover:text-rose-100 hover:bg-rose-950/40 flex items-center gap-2.5 min-h-[44px] cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4 text-rose-400" />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              ) : (
+                /* Unauthenticated Mobile Auth Buttons */
+                <div className="pt-2 border-t border-white/10 flex items-center gap-3">
+                  <a
+                    href="#login"
+                    onClick={(e) => {
+                      closeMobileMenu();
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/login');
+                      }
+                    }}
+                    className="flex-1 text-center py-2.5 text-sm font-medium text-slate-200 border border-white/15 rounded-xl hover:bg-white/10 transition-colors min-h-[44px] flex items-center justify-center cursor-pointer"
+                  >
+                    Log In
+                  </a>
+                  <a
+                    href="#signup"
+                    onClick={(e) => {
+                      closeMobileMenu();
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/signup');
+                      }
+                    }}
+                    className="flex-1 text-center py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl hover:from-blue-500 hover:to-cyan-400 shadow-md shadow-blue-600/30 min-h-[44px] flex items-center justify-center cursor-pointer"
+                  >
+                    Sign Up
+                  </a>
+                </div>
+              )}
+            </nav>
           </div>
         </>
       )}

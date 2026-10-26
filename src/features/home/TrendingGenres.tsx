@@ -80,23 +80,23 @@ export const TrendingGenres: React.FC = () => {
   return (
     <section className="space-y-10" aria-label="Curated Meme Universes">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="space-y-1.5 text-left">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-center sm:text-left">
+        <div className="space-y-1.5 flex flex-col items-center sm:items-start">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-600">
             <Flame className="w-4 h-4 text-orange-500" />
             <span>Curated Collections</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-center sm:text-left">
             Explore by Vibe & Universe
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-normal">
+          <p className="text-xs sm:text-sm text-slate-500 font-normal text-center sm:text-left">
             Find the perfect punchline for your specific niche, audience, and community.
           </p>
         </div>
 
         <a
           href="#templates"
-          className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group self-start sm:self-auto"
+          className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center justify-center gap-1 group self-center sm:self-auto"
         >
           <span>View All 500K+ Templates</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

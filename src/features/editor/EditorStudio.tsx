@@ -178,12 +178,12 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-[#070d1e] text-slate-100 overflow-hidden select-none">
+    <div className="flex flex-col h-[100dvh] w-full max-w-[100vw] bg-[#070d1e] text-slate-100 overflow-hidden select-none">
       {/* Top Toolbar */}
       <EditorToolbar onBack={onBack} onExport={handleExport} />
 
       {/* Main Studio Body: Canvas + Properties Panel */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative min-h-0">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative min-h-0 min-w-0">
         {/* Centered Canvas Editing Viewport */}
         <main
           id="editor-canvas-viewport"

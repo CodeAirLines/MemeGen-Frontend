@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Sparkles, ArrowRight, Zap, Crown, Users } from 'lucide-react';
+import { Check, ArrowRight, Zap, Crown, Users } from 'lucide-react';
 
 export const PricingSection: React.FC = () => {
   const [annualBilling, setAnnualBilling] = useState(true);
@@ -108,7 +108,7 @@ export const PricingSection: React.FC = () => {
             <div>
               <h3 className="text-lg font-bold text-white flex items-center gap-1.5">
                 <span>MemeHub Pro</span>
-                <Sparkles className="w-4 h-4 text-cyan-300 animate-spin" />
+                <Zap className="w-4 h-4 text-cyan-300" />
               </h3>
               <p className="text-xs text-blue-200 mt-1">
                 For power creators, meme pages, and serious content creators.

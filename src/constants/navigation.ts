@@ -16,9 +16,11 @@ export const MAIN_NAV_LINKS: NavLink[] = [
 export const FOOTER_PRODUCT_LINKS = [
   { label: 'Home', href: '#home' },
   { label: 'Meme Generator', href: '#create' },
+  { label: 'My Drafts', href: '#drafts' },
+  { label: 'Creator Profile', href: '#profile' },
+  { label: 'Templates', href: '#templates' },
   { label: 'GIF Maker', href: '#gif-maker' },
   { label: 'AI Tools', href: '#ai-tools' },
-  { label: 'Templates', href: '#templates' },
   { label: 'Explore', href: '#explore' },
 ];
 

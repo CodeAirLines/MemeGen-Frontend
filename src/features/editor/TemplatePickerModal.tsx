@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Search, Sparkles, Check } from 'lucide-react';
+import { X, Search, Check, Layers } from 'lucide-react';
 import { POPULAR_TEMPLATES, TEMPLATE_CATEGORIES } from '../../constants/templates';
 import type { MemeTemplate } from '../../types/template';
 import { useEditorStore } from '../../stores/useEditorStore';
@@ -47,27 +47,27 @@ export const TemplatePickerModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200"
       onClick={() => setIsTemplatePickerOpen(false)}
       role="dialog"
       aria-modal="true"
       aria-labelledby="template-picker-title"
     >
       <div
-        className="w-full max-w-3xl max-h-[85vh] bg-[#071330] border border-white/15 rounded-3xl p-4 sm:p-6 shadow-2xl text-white flex flex-col space-y-4 animate-in zoom-in-95 duration-150 overflow-hidden"
+        className="w-full max-w-3xl max-h-[92dvh] max-h-[92vh] bg-[#071330] border border-white/15 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-2xl text-white flex flex-col space-y-3.5 sm:space-y-4 animate-in zoom-in-95 duration-150 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-2 border-b border-white/10 shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-cyan-400">
-              <Sparkles className="w-4 h-4" />
+          <div className="flex items-center gap-2 min-w-0 pr-2">
+            <div className="w-8 h-8 rounded-xl bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+              <Layers className="w-4 h-4" />
             </div>
-            <div>
-              <h2 id="template-picker-title" className="text-base sm:text-lg font-bold text-white">
+            <div className="min-w-0">
+              <h2 id="template-picker-title" className="text-sm sm:text-lg font-bold text-white truncate">
                 Choose Meme Template
               </h2>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[10px] sm:text-[11px] text-slate-400 truncate">
                 Select any meme base to load into the studio canvas.
               </p>
             </div>
@@ -76,7 +76,7 @@ export const TemplatePickerModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsTemplatePickerOpen(false)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="min-w-[38px] min-h-[38px] flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -84,8 +84,8 @@ export const TemplatePickerModal: React.FC = () => {
         </div>
 
         {/* Search & Preserve Captions Toggle */}
-        <div className="space-y-3 shrink-0">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="space-y-2.5 shrink-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             {/* Search Input */}
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -93,13 +93,13 @@ export const TemplatePickerModal: React.FC = () => {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search templates (e.g. Drake, Shinchan, Cat)..."
-                className="w-full bg-slate-900 text-white placeholder:text-slate-500 rounded-xl border border-white/15 pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-blue-500"
+                placeholder="Search templates (e.g. Drake, Shinchan)..."
+                className="w-full bg-slate-900 text-white placeholder:text-slate-500 rounded-xl border border-white/15 pl-9 pr-3 py-2 text-base sm:text-xs focus:outline-none focus:border-blue-500"
               />
             </div>
 
             {/* Checkbox: Keep current text */}
-            <label className="flex items-center gap-2 text-xs text-slate-300 font-medium cursor-pointer select-none">
+            <label className="flex items-center gap-2 text-xs text-slate-300 font-medium cursor-pointer select-none py-1">
               <input
                 type="checkbox"
                 checked={preserveCaptions}
@@ -111,13 +111,13 @@ export const TemplatePickerModal: React.FC = () => {
           </div>
 
           {/* Category Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none touch-scroll-x text-xs">
             {TEMPLATE_CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setCategory(cat)}
-                className={`px-3 py-1 rounded-full font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-3 py-1 rounded-full font-medium whitespace-nowrap transition-colors cursor-pointer min-h-[32px] flex items-center ${
                   category === cat
                     ? 'bg-blue-600 text-white'
                     : 'bg-white/5 text-slate-300 hover:bg-white/10'

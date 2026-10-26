@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 
-export type AppRoute = 'home' | 'login' | 'signup' | 'editor';
+export type AppRoute =
+  | 'home'
+  | 'login'
+  | 'signup'
+  | 'editor'
+  | 'profile'
+  | 'drafts'
+  | 'gif-generator';
 
 function getCurrentRoute(): AppRoute {
   if (typeof window === 'undefined') return 'home';
@@ -16,6 +23,21 @@ function getCurrentRoute(): AppRoute {
   }
   if (pathname === '/editor' || hash === '#editor' || pathname.startsWith('/editor')) {
     return 'editor';
+  }
+  if (pathname === '/profile' || hash === '#profile' || pathname.startsWith('/profile')) {
+    return 'profile';
+  }
+  if (pathname === '/drafts' || hash === '#drafts' || pathname.startsWith('/drafts')) {
+    return 'drafts';
+  }
+  if (
+    pathname === '/gif-maker' ||
+    hash === '#gif-maker' ||
+    pathname === '/gif-generator' ||
+    hash === '#gif-generator' ||
+    pathname.startsWith('/gif-')
+  ) {
+    return 'gif-generator';
   }
 
   return 'home';
@@ -38,28 +60,47 @@ export function useAppRouter() {
     };
   }, []);
 
-  const navigate = useCallback((to: string) => {
+  const navigate = useCallback((to: string, options?: { preserveScroll?: boolean }) => {
     if (typeof window === 'undefined') return;
 
-    // Support pathnames (/login, /signup, /editor, /) and hashes (#login, #signup, #editor, #home)
+    // Support pathnames (/login, /signup, /editor, /profile, /drafts, /) and hashes (#login, #signup, #editor, #profile, #drafts, #home)
     const normalized = to.toLowerCase();
+    const shouldScroll = !options?.preserveScroll;
 
     if (normalized === '/login' || normalized === '#login') {
       window.history.pushState({}, '', '/login');
       setRoute('login');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Do not scroll to top when opening authentication modal over the page
     } else if (normalized === '/signup' || normalized === '#signup') {
       window.history.pushState({}, '', '/signup');
       setRoute('signup');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Do not scroll to top when opening authentication modal over the page
     } else if (normalized === '/editor' || normalized === '#editor' || normalized.startsWith('/editor')) {
       window.history.pushState({}, '', '/editor');
       setRoute('editor');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (normalized === '/profile' || normalized === '#profile' || normalized.startsWith('/profile')) {
+      window.history.pushState({}, '', '/profile');
+      setRoute('profile');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (normalized === '/drafts' || normalized === '#drafts' || normalized.startsWith('/drafts')) {
+      window.history.pushState({}, '', '/drafts');
+      setRoute('drafts');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/gif-maker' ||
+      normalized === '#gif-maker' ||
+      normalized === '/gif-generator' ||
+      normalized === '#gif-generator' ||
+      normalized.startsWith('/gif-')
+    ) {
+      window.history.pushState({}, '', '/gif-maker');
+      setRoute('gif-generator');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (normalized === '/' || normalized === '#home') {
       window.history.pushState({}, '', '/');
       setRoute('home');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (to.startsWith('#')) {
       // Anchor link on home page
       window.history.pushState({}, '', '/' + to);

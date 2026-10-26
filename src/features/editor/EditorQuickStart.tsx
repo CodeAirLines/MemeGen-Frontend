@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layers, Sparkles, Type, Download, RefreshCw, Palette } from 'lucide-react';
+import { Layers, Type, Download, RefreshCw, Palette } from 'lucide-react';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -21,7 +21,7 @@ export const EditorQuickStart: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <Sparkles className="w-4 h-4" />
+            <Layers className="w-4 h-4" />
             <span>Interactive Creator Canvas</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -184,7 +184,7 @@ export const EditorQuickStart: React.FC = () => {
               {/* Day 2 Action notice */}
               <div className="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-800/40 text-xs text-indigo-300 space-y-1">
                 <p className="font-semibold flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <Layers className="w-3.5 h-3.5 text-indigo-400" />
                   Day 1 State Integration Verified
                 </p>
                 <p className="text-slate-400 text-[11px]">
@@ -241,7 +241,7 @@ export const EditorQuickStart: React.FC = () => {
               <Button
                 variant="primary"
                 size="md"
-                leftIcon={<Sparkles className="w-4 h-4" />}
+                leftIcon={<Layers className="w-4 h-4" />}
               >
                 Browse Meme Templates
               </Button>

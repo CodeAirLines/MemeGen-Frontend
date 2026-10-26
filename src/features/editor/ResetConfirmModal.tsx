@@ -44,18 +44,18 @@ export const ResetConfirmModal: React.FC = () => {
           </p>
         </div>
 
-        <div className="pt-2 flex items-center justify-end gap-3">
+        <div className="pt-2 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3">
           <button
             type="button"
             onClick={() => setIsResetModalOpen(false)}
-            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer min-h-[44px] flex items-center justify-center"
           >
             Keep Editing
           </button>
           <button
             type="button"
             onClick={resetToTemplate}
-            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/30 transition-all cursor-pointer flex items-center gap-1.5"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/30 transition-all cursor-pointer flex items-center justify-center gap-1.5 min-h-[44px]"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Reset Canvas</span>

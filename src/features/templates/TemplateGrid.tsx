@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronDown, ArrowRight, Sparkles, SlidersHorizontal, X } from 'lucide-react';
+import { ChevronDown, ArrowRight, SlidersHorizontal, X } from 'lucide-react';
 import { POPULAR_TEMPLATES, TEMPLATE_CATEGORIES } from '../../constants/templates';
 import { TemplateCard } from './TemplateCard';
 import { SectionHeading } from '../../components/ui/SectionHeading';
@@ -154,7 +154,7 @@ export const TemplateGrid: React.FC = () => {
       </div>
 
       {/* Category Filter Pills Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none touch-scroll-x">
         {TEMPLATE_CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (
@@ -162,7 +162,7 @@ export const TemplateGrid: React.FC = () => {
               key={cat}
               type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer min-h-[34px] flex items-center ${
+              className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer min-h-[36px] flex items-center ${
                 isActive
                   ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900'
@@ -180,7 +180,7 @@ export const TemplateGrid: React.FC = () => {
             onClick={() => setShowMoreMenu(!showMoreMenu)}
             aria-expanded={showMoreMenu}
             aria-haspopup="menu"
-            className="whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 flex items-center gap-1 cursor-pointer min-h-[34px]"
+            className="whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 flex items-center gap-1 cursor-pointer min-h-[36px]"
           >
             <span>More</span>
             <ChevronDown className="w-3 h-3" />
@@ -271,7 +271,7 @@ export const TemplateGrid: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={resetFilters}
-              leftIcon={<Sparkles className="w-3.5 h-3.5 text-blue-600" />}
+              leftIcon={<SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />}
             >
               Reset All Filters
             </Button>

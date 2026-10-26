@@ -49,8 +49,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const sizeStyles = {
-      sm: 'h-8.5 text-xs rounded-lg py-1.5',
-      md: 'h-10 text-sm rounded-xl py-2',
+      sm: 'h-9 text-xs rounded-lg py-1.5',
+      md: 'h-10 text-base sm:text-sm rounded-xl py-2',
       lg: 'h-12 text-base rounded-xl py-2.5',
     };
 

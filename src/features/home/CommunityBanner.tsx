@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, ArrowRight, MessageSquare, ShieldCheck, Flame } from 'lucide-react';
+import { ArrowRight, MessageSquare, ShieldCheck, Flame } from 'lucide-react';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 import { POPULAR_TEMPLATES } from '../../constants/templates';
 
@@ -44,7 +44,7 @@ export const CommunityBanner: React.FC = () => {
             onClick={handleStartNow}
             className="bg-blue-500 hover:bg-blue-400 text-white font-bold text-sm px-7 py-4 rounded-xl shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-400/50 hover:-translate-y-1 hover:scale-105 flex items-center gap-2 transition-all duration-200 cursor-pointer active:scale-95 group"
           >
-            <Sparkles className="w-4 h-4 text-cyan-200" />
+            <Flame className="w-4 h-4 text-cyan-200" />
             <span>Launch Meme Editor Now</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
           </button>

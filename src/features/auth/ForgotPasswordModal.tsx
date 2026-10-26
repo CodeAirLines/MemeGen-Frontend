@@ -56,11 +56,11 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
               autoFocus
             />
 
-            <div className="flex items-center justify-end gap-2.5 pt-2">
-              <Button variant="outline" size="sm" onClick={handleReset} type="button">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-2">
+              <Button variant="outline" size="sm" onClick={handleReset} type="button" className="w-full sm:w-auto min-h-[42px]">
                 Cancel
               </Button>
-              <Button variant="primary" size="sm" type="submit" disabled={!email}>
+              <Button variant="primary" size="sm" type="submit" disabled={!email} className="w-full sm:w-auto min-h-[42px]">
                 Request Reset Link
               </Button>
             </div>

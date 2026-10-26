@@ -36,7 +36,11 @@ import { TrendingArticles } from '../features/home/TrendingArticles';
 import { MemeProTips } from '../features/home/MemeProTips';
 import { CommunityBanner } from '../features/home/CommunityBanner';
 
-export const HomePage: React.FC = () => {
+export interface HomePageProps {
+  onNavigate?: (route: string) => void;
+}
+
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const setSelectedTemplate = useTemplateStore((state) => state.setSelectedTemplate);
   const openPreview = useTemplateStore((state) => state.openPreview);
 
@@ -75,16 +79,16 @@ export const HomePage: React.FC = () => {
         <Container size="lg" cleanPadding>
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Headline & CTAs */}
-            <div className="lg:col-span-7 space-y-6 text-left z-10">
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left z-10 flex flex-col items-center lg:items-start">
               {/* Top Pill Tag */}
-              <div>
+              <div className="flex justify-center lg:justify-start">
                 <Badge variant="dark" size="sm" dot>
                   CREATE • EDIT • SHARE • GO VIRAL
                 </Badge>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.12] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.12] tracking-tight text-center lg:text-left">
                 Turn Your Ideas <br />
                 Into{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-200">
@@ -93,13 +97,13 @@ export const HomePage: React.FC = () => {
               </h1>
 
               {/* Subtitle */}
-              <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal">
+              <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal mx-auto lg:mx-0 text-center lg:text-left">
                 The easiest and most powerful meme generator, GIF maker and image editing platform.
                 Create, customize and share memes in seconds.
               </p>
 
               {/* Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 w-full sm:w-auto">
                 <a href="#templates" className="w-full sm:w-auto">
                   <Button
                     variant="primary"
@@ -123,26 +127,26 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* Creators Social Proof */}
-              <div className="pt-4 flex items-center gap-3">
+              <div className="pt-4 flex items-center justify-center lg:justify-start gap-3">
                 <div className="flex -space-x-2">
                   <img
                     className="w-8 h-8 rounded-full border-2 border-[#091f58] object-cover hover:scale-125 hover:z-20 transition-transform duration-200 cursor-pointer"
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80"
+                    src="/Profille/no-dp_16.webp"
                     alt="Creator"
                   />
                   <img
                     className="w-8 h-8 rounded-full border-2 border-[#091f58] object-cover hover:scale-125 hover:z-20 transition-transform duration-200 cursor-pointer"
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80"
+                    src="/Profille/no-dp_16.webp"
                     alt="Creator"
                   />
                   <img
                     className="w-8 h-8 rounded-full border-2 border-[#091f58] object-cover hover:scale-125 hover:z-20 transition-transform duration-200 cursor-pointer"
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80"
+                    src="/Profille/no-dp_16.webp"
                     alt="Creator"
                   />
                   <img
                     className="w-8 h-8 rounded-full border-2 border-[#091f58] object-cover hover:scale-125 hover:z-20 transition-transform duration-200 cursor-pointer"
-                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80"
+                    src="/Profille/no-dp_16.webp"
                     alt="Creator"
                   />
                 </div>
@@ -169,7 +173,7 @@ export const HomePage: React.FC = () => {
                   }
                 }}
                 aria-label="Preview featured Shin-chan meme template"
-                className="relative w-full max-w-[340px] sm:max-w-none sm:w-96 lg:w-[410px] rounded-3xl bg-white p-3 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_40px_rgba(37,99,235,0.3)] border border-white/80 rotate-0 hover:scale-[1.02] hover:shadow-[0_30px_70px_-15px_rgba(6,182,212,0.35)] transition-all duration-300 cursor-pointer group z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="relative w-full max-w-[275px] xs:max-w-[315px] sm:max-w-none sm:w-96 lg:w-[410px] rounded-3xl bg-white p-2.5 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_40px_rgba(37,99,235,0.3)] border border-white/80 rotate-0 hover:scale-[1.02] hover:shadow-[0_30px_70px_-15px_rgba(6,182,212,0.35)] transition-all duration-300 cursor-pointer group z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
                 <div className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-square">
                   <img
@@ -180,7 +184,7 @@ export const HomePage: React.FC = () => {
 
                   {/* Top Caption: IDEAS TODAY */}
                   <div
-                    className="absolute top-4 inset-x-2 text-center font-['Impact',sans-serif] font-black text-white text-2xl sm:text-3xl tracking-wider uppercase select-none transition-transform group-hover:-translate-y-0.5 duration-200"
+                    className="absolute top-3 sm:top-4 inset-x-2 text-center font-['Impact',sans-serif] font-black text-white text-xl sm:text-3xl tracking-wider uppercase select-none transition-transform group-hover:-translate-y-0.5 duration-200"
                     style={{
                       textShadow:
                         '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 3px 0 #000, 3px 0 0 #000, -3px 0 0 #000, 0 -3px 0 #000',
@@ -191,7 +195,7 @@ export const HomePage: React.FC = () => {
 
                   {/* Bottom Caption: VIRAL TOMORROW */}
                   <div
-                    className="absolute bottom-4 inset-x-2 text-center font-['Impact',sans-serif] font-black text-white text-2xl sm:text-3xl tracking-wider uppercase select-none transition-transform group-hover:translate-y-0.5 duration-200"
+                    className="absolute bottom-3 sm:bottom-4 inset-x-2 text-center font-['Impact',sans-serif] font-black text-white text-xl sm:text-3xl tracking-wider uppercase select-none transition-transform group-hover:translate-y-0.5 duration-200"
                     style={{
                       textShadow:
                         '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 3px 0 #000, 3px 0 0 #000, -3px 0 0 #000, 0 -3px 0 #000',
@@ -202,8 +206,8 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Floating Left Toolbar Card - Straight and aligned on mobile */}
-              <div className="absolute left-1 sm:-left-8 top-3 sm:top-12 bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-1.5 sm:p-3 shadow-xl sm:shadow-2xl border border-white/80 space-y-1 sm:space-y-2.5 z-20 text-slate-700 hover:shadow-cyan-500/20 hover:-translate-y-1 transition-all duration-300 rotate-0">
+              {/* Floating Left Toolbar Card - Visible on desktop & tablet */}
+              <div className="hidden sm:block absolute left-1 sm:-left-8 top-3 sm:top-12 bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-1.5 sm:p-3 shadow-xl sm:shadow-2xl border border-white/80 space-y-1 sm:space-y-2.5 z-20 text-slate-700 hover:shadow-cyan-500/20 hover:-translate-y-1 transition-all duration-300 rotate-0">
                 <div className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1 sm:hover:translate-x-1.5 active:scale-95 text-[11px] sm:text-xs font-semibold cursor-pointer transition-all duration-200">
                   <Type className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                   <span>Text</span>
@@ -238,7 +242,7 @@ export const HomePage: React.FC = () => {
                   }
                 }}
                 aria-label="Remix Kazama meme"
-                className="absolute right-1 sm:-right-8 -bottom-4 sm:-bottom-7 w-38 sm:w-52 rounded-2xl bg-white p-2 sm:p-2.5 shadow-2xl shadow-rose-950/40 border-2 border-white rotate-0 sm:rotate-2 hover:rotate-0 hover:scale-105 sm:hover:scale-108 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-rose-500/30 transition-all duration-300 cursor-pointer group z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+                className="absolute right-0 xs:right-1 sm:-right-8 -bottom-3 sm:-bottom-7 w-32 xs:w-36 sm:w-52 rounded-2xl bg-white p-1.5 sm:p-2.5 shadow-2xl shadow-rose-950/40 border-2 border-white rotate-0 sm:rotate-2 hover:rotate-0 hover:scale-105 sm:hover:scale-108 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-rose-500/30 transition-all duration-300 cursor-pointer group z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
               >
                 {/* Comic Rage Emote Badge */}
                 <div className="absolute -top-3.5 -right-2 w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-md animate-bounce z-30">
@@ -310,48 +314,60 @@ export const HomePage: React.FC = () => {
       {/* 2. STATS / METRICS BAR                                          */}
       {/* ============================================================== */}
       <Container size="lg" className="-mt-10 sm:-mt-12 relative z-30">
-        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-center">
+        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-2.5 xs:p-3 sm:p-6 grid grid-cols-4 gap-1.5 xs:gap-2 sm:gap-6 items-center">
           {/* Stat 1 */}
-          <div className="flex items-center gap-3.5 justify-center sm:justify-start p-2 rounded-xl hover:bg-slate-50 hover:scale-105 transition-all duration-200 cursor-pointer group">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-200 shadow-xs">
-              <Grid className="w-6 h-6" />
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3.5 justify-center sm:justify-start p-1 sm:p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 cursor-pointer group text-center sm:text-left">
+            <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-200 shadow-xs">
+              <Grid className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <div className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">10M+</div>
-              <div className="text-xs text-slate-500 font-medium">Memes Created</div>
+            <div className="min-w-0">
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight">10M+</div>
+              <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
+                <span className="sm:hidden">Memes</span>
+                <span className="hidden sm:inline">Memes Created</span>
+              </div>
             </div>
           </div>
 
           {/* Stat 2 */}
-          <div className="flex items-center gap-3.5 justify-center sm:justify-start p-2 rounded-xl hover:bg-slate-50 hover:scale-105 transition-all duration-200 cursor-pointer group">
-            <div className="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-200 shadow-xs">
-              <Users className="w-6 h-6" />
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3.5 justify-center sm:justify-start p-1 sm:p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 cursor-pointer group text-center sm:text-left">
+            <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-200 shadow-xs">
+              <Users className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <div className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-cyan-600 transition-colors">2M+</div>
-              <div className="text-xs text-slate-500 font-medium">Active Creators</div>
+            <div className="min-w-0">
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-cyan-600 transition-colors leading-tight">2M+</div>
+              <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
+                <span className="sm:hidden">Creators</span>
+                <span className="hidden sm:inline">Active Creators</span>
+              </div>
             </div>
           </div>
 
           {/* Stat 3 */}
-          <div className="flex items-center gap-3.5 justify-center sm:justify-start p-2 rounded-xl hover:bg-slate-50 hover:scale-105 transition-all duration-200 cursor-pointer group">
-            <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-200 shadow-xs">
-              <Layers className="w-6 h-6" />
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3.5 justify-center sm:justify-start p-1 sm:p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 cursor-pointer group text-center sm:text-left">
+            <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-200 shadow-xs">
+              <Layers className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <div className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">500K+</div>
-              <div className="text-xs text-slate-500 font-medium">Meme Templates</div>
+            <div className="min-w-0">
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors leading-tight">500K+</div>
+              <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
+                <span className="sm:hidden">Templates</span>
+                <span className="hidden sm:inline">Meme Templates</span>
+              </div>
             </div>
           </div>
 
           {/* Stat 4 */}
-          <div className="flex items-center gap-3.5 justify-center sm:justify-start p-2 rounded-xl hover:bg-slate-50 hover:scale-105 transition-all duration-200 cursor-pointer group">
-            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-amber-400 group-hover:text-amber-950 transition-all duration-200 shadow-xs">
-              <Star className="w-6 h-6 fill-amber-400 text-amber-400 group-hover:fill-amber-950 group-hover:text-amber-950" />
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3.5 justify-center sm:justify-start p-1 sm:p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 cursor-pointer group text-center sm:text-left">
+            <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-amber-400 group-hover:text-amber-950 transition-all duration-200 shadow-xs">
+              <Star className="w-4 h-4 sm:w-6 sm:h-6 fill-amber-400 text-amber-400 group-hover:fill-amber-950 group-hover:text-amber-950" />
             </div>
-            <div>
-              <div className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors">4.8/5</div>
-              <div className="text-xs text-slate-500 font-medium">User Rating</div>
+            <div className="min-w-0">
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors leading-tight">4.8/5</div>
+              <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
+                <span className="sm:hidden">Rating</span>
+                <span className="hidden sm:inline">User Rating</span>
+              </div>
             </div>
           </div>
         </div>
@@ -378,8 +394,8 @@ export const HomePage: React.FC = () => {
           {/* 4 Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Card 1: Meme Generator */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-left shadow-sm hover:shadow-xl hover:border-blue-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col justify-between h-56 cursor-pointer">
-              <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center sm:text-left shadow-sm hover:shadow-xl hover:border-blue-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col items-center sm:items-start justify-between h-56 cursor-pointer">
+              <div className="space-y-4 flex flex-col items-center sm:items-start">
                 <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-600/30 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                   <ImageIcon className="w-6 h-6" />
                 </div>
@@ -392,15 +408,24 @@ export const HomePage: React.FC = () => {
               </div>
               <a
                 href="#create"
-                className="text-blue-600 text-sm font-bold flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-200"
+                className="text-blue-600 text-sm font-bold flex items-center justify-center sm:justify-start gap-1 group-hover:translate-x-2 transition-transform duration-200"
               >
-                <span>→</span>
+                <span>Explore →</span>
               </a>
             </div>
 
             {/* Card 2: GIF Maker */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-left shadow-sm hover:shadow-xl hover:border-purple-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col justify-between h-56 cursor-pointer">
-              <div className="space-y-4">
+            <div
+              onClick={() => {
+                if (onNavigate) {
+                  onNavigate('/gif-maker');
+                } else {
+                  window.location.hash = '#gif-maker';
+                }
+              }}
+              className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center sm:text-left shadow-sm hover:shadow-xl hover:border-purple-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col items-center sm:items-start justify-between h-56 cursor-pointer"
+            >
+              <div className="space-y-4 flex flex-col items-center sm:items-start">
                 <div className="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-600/30 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                   <span className="font-bold text-xs tracking-tighter">GIF</span>
                 </div>
@@ -413,15 +438,21 @@ export const HomePage: React.FC = () => {
               </div>
               <a
                 href="#gif-maker"
-                className="text-purple-600 text-sm font-bold flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-200"
+                onClick={(e) => {
+                  if (onNavigate) {
+                    e.preventDefault();
+                    onNavigate('/gif-maker');
+                  }
+                }}
+                className="text-purple-600 text-sm font-bold flex items-center justify-center sm:justify-start gap-1 group-hover:translate-x-2 transition-transform duration-200"
               >
-                <span>→</span>
+                <span>Explore →</span>
               </a>
             </div>
 
             {/* Card 3: AI Meme Generator */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-left shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col justify-between h-56 cursor-pointer">
-              <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center sm:text-left shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col items-center sm:items-start justify-between h-56 cursor-pointer">
+              <div className="space-y-4 flex flex-col items-center sm:items-start">
                 <div className="w-12 h-12 rounded-xl bg-cyan-500 text-white flex items-center justify-center shadow-md shadow-cyan-500/30 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                   <Wand2 className="w-6 h-6" />
                 </div>
@@ -434,15 +465,15 @@ export const HomePage: React.FC = () => {
               </div>
               <a
                 href="#ai-tools"
-                className="text-cyan-600 text-sm font-bold flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-200"
+                className="text-cyan-600 text-sm font-bold flex items-center justify-center sm:justify-start gap-1 group-hover:translate-x-2 transition-transform duration-200"
               >
-                <span>→</span>
+                <span>Explore →</span>
               </a>
             </div>
 
             {/* Card 4: Image Editor */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-left shadow-sm hover:shadow-xl hover:border-rose-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col justify-between h-56 cursor-pointer">
-              <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center sm:text-left shadow-sm hover:shadow-xl hover:border-rose-400 hover:-translate-y-2.5 transition-all duration-300 group flex flex-col items-center sm:items-start justify-between h-56 cursor-pointer">
+              <div className="space-y-4 flex flex-col items-center sm:items-start">
                 <div className="w-12 h-12 rounded-xl bg-rose-500 text-white flex items-center justify-center shadow-md shadow-rose-500/30 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                   <Sliders className="w-6 h-6" />
                 </div>
@@ -455,9 +486,9 @@ export const HomePage: React.FC = () => {
               </div>
               <a
                 href="#create"
-                className="text-rose-600 text-sm font-bold flex items-center gap-1 group-hover:translate-x-2 transition-transform duration-200"
+                className="text-rose-600 text-sm font-bold flex items-center justify-center sm:justify-start gap-1 group-hover:translate-x-2 transition-transform duration-200"
               >
-                <span>→</span>
+                <span>Explore →</span>
               </a>
             </div>
           </div>
@@ -506,17 +537,17 @@ export const HomePage: React.FC = () => {
               </p>
 
               {/* Prompt Input Box */}
-              <form onSubmit={handleGenerateAi} className="relative flex items-center pt-2">
+              <form onSubmit={handleGenerateAi} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
                 <input
                   type="text"
                   value={aiPrompt}
                   onChange={(e) => setAiPrompt(e.target.value)}
                   placeholder="A cat working on a laptop, looking stressed..."
-                  className="w-full bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl pl-4 pr-36 sm:pr-40 py-3.5 border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 shadow-sm transition-all"
+                  className="flex-1 bg-white text-slate-900 placeholder-slate-400 text-base sm:text-sm rounded-xl px-4 py-3 border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 shadow-sm transition-all min-h-[46px]"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-lg flex items-center gap-1.5 shadow-md shadow-blue-600/30 hover:shadow-lg hover:shadow-blue-600/50 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm px-5 py-3 rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/30 hover:shadow-lg hover:shadow-blue-600/50 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer min-h-[46px] shrink-0"
                 >
                   <span>{aiGenerated ? 'Generated!' : 'Generate Meme'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

@@ -53,8 +53,8 @@ export const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccep
         </section>
       </div>
 
-      <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100">
-        <Button variant="outline" size="sm" onClick={onClose}>
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-4 border-t border-slate-100">
+        <Button variant="outline" size="sm" onClick={onClose} className="w-full sm:w-auto min-h-[42px]">
           Close
         </Button>
         {onAccept && (
@@ -66,6 +66,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccep
               onClose();
             }}
             leftIcon={<CheckCircle2 className="w-4 h-4" />}
+            className="w-full sm:w-auto min-h-[42px]"
           >
             I Understand & Agree
           </Button>

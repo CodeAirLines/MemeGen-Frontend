@@ -51,32 +51,32 @@ export const TemplatePreviewModal: React.FC = () => {
     >
       <div className="space-y-6">
         {/* Template Image Display */}
-        <div className="relative rounded-xl overflow-hidden bg-slate-50 border border-slate-200/80 p-3 flex items-center justify-center min-h-[260px] max-h-[380px]">
+        <div className="relative rounded-xl overflow-hidden bg-slate-50 border border-slate-200/80 p-2 sm:p-3 flex items-center justify-center min-h-[180px] sm:min-h-[260px] max-h-[40vh] sm:max-h-[380px]">
           {!imageError ? (
             <img
               src={previewTemplate.imageUrl}
               alt={previewTemplate.name}
               onError={() => setImageError(true)}
-              className="w-auto h-auto max-w-full max-h-[350px] object-contain rounded-lg shadow-2xs"
+              className="w-auto h-auto max-w-full max-h-[36vh] sm:max-h-[350px] object-contain rounded-lg shadow-2xs"
             />
           ) : (
-            <div className="flex flex-col items-center justify-center p-8 text-center text-slate-400">
+            <div className="flex flex-col items-center justify-center p-6 text-center text-slate-400">
               <ImageOff className="w-10 h-10 text-slate-300 mb-2" />
               <p className="text-sm font-semibold text-slate-700">{previewTemplate.name}</p>
               <p className="text-xs text-slate-400 mt-1">Image preview unavailable</p>
             </div>
           )}
 
-          <div className="absolute top-3 right-3">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-900/85 text-white backdrop-blur-md shadow-xs">
+          <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3">
+            <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[10px] sm:text-[11px] font-semibold bg-slate-900/85 text-white backdrop-blur-md shadow-xs">
               {previewTemplate.width} × {previewTemplate.height} px
             </span>
           </div>
         </div>
 
         {/* Template Details & Text Layout Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
               <Layers className="w-3.5 h-3.5 text-blue-600" />
               <span>Text Slots Configuration</span>
@@ -86,7 +86,7 @@ export const TemplatePreviewModal: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+          <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
               <Maximize2 className="w-3.5 h-3.5 text-purple-600" />
               <span>Canvas Aspect Ratio</span>
@@ -98,7 +98,7 @@ export const TemplatePreviewModal: React.FC = () => {
         </div>
 
         {/* Tags */}
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
             <Tag className="w-3.5 h-3.5 text-blue-600" />
             <span>Search Tags:</span>
@@ -120,12 +120,12 @@ export const TemplatePreviewModal: React.FC = () => {
         </div>
 
         {/* Action Controls */}
-        <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+        <div className="pt-4 border-t border-slate-200 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3">
           <Button
             variant="ghost"
             size="md"
             onClick={closePreview}
-            className="text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            className="w-full sm:w-auto text-slate-600 hover:text-slate-900 hover:bg-slate-100 min-h-[44px]"
           >
             Cancel
           </Button>
@@ -134,7 +134,7 @@ export const TemplatePreviewModal: React.FC = () => {
             size="md"
             onClick={handleUseAndClose}
             leftIcon={isAlreadySelected ? <CheckCircle className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
-            className="bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30 min-h-[44px]"
           >
             {isAlreadySelected ? 'Continue with This Template' : 'Use Template in Editor'}
           </Button>

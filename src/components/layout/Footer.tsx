@@ -104,7 +104,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-2 text-xs font-medium">
               {FOOTER_PRODUCT_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="hover:text-blue-600 transition-colors">
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      if (onNavigate && (link.href === '#drafts' || link.href === '#profile' || link.href === '#create')) {
+                        e.preventDefault();
+                        if (link.href === '#create') {
+                          onNavigate('/editor');
+                        } else {
+                          onNavigate(link.href.replace('#', '/'));
+                        }
+                      }
+                    }}
+                    className="hover:text-blue-600 transition-colors"
+                  >
                     {link.label}
                   </a>
                 </li>
@@ -160,7 +173,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   placeholder="Enter your email"
                   required
                   aria-label="Email address for updates"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl pl-3 pr-10 py-2.5 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-base sm:text-xs rounded-xl pl-3 pr-10 py-2.5 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 <IconButton
                   type="submit"

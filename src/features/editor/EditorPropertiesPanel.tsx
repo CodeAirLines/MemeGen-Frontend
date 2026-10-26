@@ -15,7 +15,6 @@ import {
   Sliders,
   Layers,
   RotateCw,
-  Sparkles,
 } from 'lucide-react';
 import type { TextLayer } from '../../types/editor';
 import { useEditorStore } from '../../stores/useEditorStore';
@@ -57,8 +56,18 @@ export const EditorPropertiesPanel: React.FC = () => {
   const moveLayerOrder = useEditorStore((state) => state.moveLayerOrder);
 
   const [mobileTab, setMobileTab] = useState<MobileTab>('text');
+  const [isMobileCollapsed, setIsMobileCollapsed] = useState(false);
+  const [prevSelectedLayerId, setPrevSelectedLayerId] = useState<string | null>(selectedLayerId);
 
   const selectedLayer = textLayers.find((l) => l.id === selectedLayerId);
+
+  // Auto-expand mobile panel during render when a layer is selected
+  if (selectedLayerId && selectedLayerId !== prevSelectedLayerId) {
+    setPrevSelectedLayerId(selectedLayerId);
+    setIsMobileCollapsed(false);
+  } else if (!selectedLayerId && prevSelectedLayerId) {
+    setPrevSelectedLayerId(null);
+  }
 
   const textInputSnapshotRef = useRef<{ textLayers: TextLayer[]; memeTitle: string } | null>(null);
   const sliderSnapshotRef = useRef<{ textLayers: TextLayer[]; memeTitle: string } | null>(null);
@@ -105,58 +114,88 @@ export const EditorPropertiesPanel: React.FC = () => {
   return (
     <aside
       aria-label="Meme text and layer controls"
-      className="w-full lg:w-84 xl:w-96 bg-[#071330] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col shrink-0 text-slate-100 max-h-[50vh] lg:max-h-none overflow-y-auto"
+      className={`w-full lg:w-84 xl:w-96 bg-[#071330] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col shrink-0 text-slate-100 ${
+        isMobileCollapsed ? 'max-h-[50px] lg:max-h-none' : 'max-h-[46dvh] lg:max-h-none'
+      } overflow-hidden lg:overflow-y-auto transition-[max-height] duration-200 ease-in-out`}
     >
       {/* Mobile Tab Navigation */}
       <nav
         aria-label="Editor sections"
-        className="flex lg:hidden border-b border-white/10 bg-slate-950/40 p-1.5 gap-1 shrink-0"
+        className="flex lg:hidden border-b border-white/10 bg-slate-950/60 p-1.5 gap-1 shrink-0 items-center"
       >
         <button
           type="button"
-          onClick={() => setMobileTab('text')}
-          className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-            mobileTab === 'text'
+          onClick={() => {
+            setMobileTab('text');
+            setIsMobileCollapsed(false);
+          }}
+          className={`flex-1 py-1.5 px-2 xs:px-3 min-h-[36px] rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            mobileTab === 'text' && !isMobileCollapsed
               ? 'bg-blue-600 text-white shadow-xs'
               : 'text-slate-400 hover:text-white'
           }`}
           aria-label="Text content tab"
         >
-          <Type className="w-3.5 h-3.5" />
-          <span>Text</span>
+          <Type className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Text</span>
         </button>
 
         <button
           type="button"
-          onClick={() => setMobileTab('style')}
-          className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-            mobileTab === 'style'
+          onClick={() => {
+            setMobileTab('style');
+            setIsMobileCollapsed(false);
+          }}
+          className={`flex-1 py-1.5 px-2 xs:px-3 min-h-[36px] rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            mobileTab === 'style' && !isMobileCollapsed
               ? 'bg-blue-600 text-white shadow-xs'
               : 'text-slate-400 hover:text-white'
           }`}
           aria-label="Text styling tab"
         >
-          <Palette className="w-3.5 h-3.5" />
-          <span>Style</span>
+          <Palette className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Style</span>
         </button>
 
         <button
           type="button"
-          onClick={() => setMobileTab('layers')}
-          className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-            mobileTab === 'layers'
+          onClick={() => {
+            setMobileTab('layers');
+            setIsMobileCollapsed(false);
+          }}
+          className={`flex-1 py-1.5 px-2 xs:px-3 min-h-[36px] rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            mobileTab === 'layers' && !isMobileCollapsed
               ? 'bg-blue-600 text-white shadow-xs'
               : 'text-slate-400 hover:text-white'
           }`}
           aria-label="Layers management tab"
         >
-          <Layers className="w-3.5 h-3.5" />
-          <span>Layers ({textLayers.length})</span>
+          <Layers className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Layers ({textLayers.length})</span>
+        </button>
+
+        {/* Mobile Collapse / Expand Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setIsMobileCollapsed((prev) => !prev)}
+          className="p-1.5 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+          title={isMobileCollapsed ? 'Expand panel' : 'Collapse panel'}
+          aria-label={isMobileCollapsed ? 'Expand properties panel' : 'Collapse properties panel'}
+        >
+          {isMobileCollapsed ? (
+            <ChevronUp className="w-4 h-4 text-cyan-400" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-slate-400" />
+          )}
         </button>
       </nav>
 
       {/* Main Controls Body */}
-      <div className="p-4 sm:p-5 space-y-6 flex-1">
+      <div
+        className={`${
+          isMobileCollapsed ? 'hidden lg:block' : 'block'
+        } p-3.5 xs:p-4 sm:p-5 space-y-5 sm:space-y-6 flex-1 overflow-y-auto pb-safe`}
+      >
         {/* ========================================================= */}
         {/* SECTION 1: LAYERS LIST                                    */}
         {/* ========================================================= */}
@@ -213,7 +252,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                       }}
                       disabled={idx === textLayers.length - 1}
                       title="Move up"
-                      className="p-1 text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer"
+                      className="p-1.5 sm:p-1 min-w-[28px] min-h-[28px] flex items-center justify-center text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer rounded"
                     >
                       <ChevronUp className="w-3.5 h-3.5" />
                     </button>
@@ -225,7 +264,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                       }}
                       disabled={idx === 0}
                       title="Move down"
-                      className="p-1 text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer"
+                      className="p-1.5 sm:p-1 min-w-[28px] min-h-[28px] flex items-center justify-center text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer rounded"
                     >
                       <ChevronDown className="w-3.5 h-3.5" />
                     </button>
@@ -236,7 +275,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                         deleteTextLayer(layer.id);
                       }}
                       title="Delete layer"
-                      className="p-1 text-rose-400 hover:text-rose-300 hover:bg-rose-500/20 rounded-md cursor-pointer ml-1"
+                      className="p-1.5 sm:p-1 min-w-[28px] min-h-[28px] flex items-center justify-center text-rose-400 hover:text-rose-300 hover:bg-rose-500/20 rounded-md cursor-pointer ml-1"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -270,21 +309,21 @@ export const EditorPropertiesPanel: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setPositionPreset('top')}
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/10 hover:bg-white/20 text-slate-300 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 min-h-[28px] rounded text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-slate-300 transition-colors cursor-pointer"
                   >
                     Top
                   </button>
                   <button
                     type="button"
                     onClick={() => setPositionPreset('middle')}
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/10 hover:bg-white/20 text-slate-300 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 min-h-[28px] rounded text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-slate-300 transition-colors cursor-pointer"
                   >
                     Center
                   </button>
                   <button
                     type="button"
                     onClick={() => setPositionPreset('bottom')}
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/10 hover:bg-white/20 text-slate-300 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 min-h-[28px] rounded text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-slate-300 transition-colors cursor-pointer"
                   >
                     Bottom
                   </button>
@@ -301,7 +340,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                 }
                 onBlur={handleTextBlur}
                 placeholder="Enter caption text..."
-                className="w-full bg-slate-900 text-slate-100 placeholder:text-slate-600 rounded-xl border border-white/15 p-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 font-bold resize-none"
+                className="w-full bg-slate-900 text-slate-100 placeholder:text-slate-600 rounded-xl border border-white/15 p-3 text-base sm:text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 font-bold resize-none"
               />
 
               {/* Action buttons under text: Duplicate / Delete */}
@@ -309,7 +348,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => duplicateTextLayer(selectedLayer.id)}
-                  className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white px-3 py-2 min-h-[38px] rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   <Copy className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Duplicate Layer</span>
@@ -318,7 +357,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => deleteTextLayer(selectedLayer.id)}
-                  className="flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1.5 rounded-lg hover:bg-rose-500/15 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 px-3 py-2 min-h-[38px] rounded-lg hover:bg-rose-500/15 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Delete Layer</span>
@@ -351,7 +390,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                   onChange={(e) =>
                     updateTextLayer(selectedLayer.id, { fontFamily: e.target.value }, true)
                   }
-                  className="w-full bg-slate-900 text-slate-100 rounded-xl border border-white/15 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer"
+                  className="w-full bg-slate-900 text-slate-100 rounded-xl border border-white/15 px-3 py-2.5 sm:py-2 text-base sm:text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer min-h-[42px] sm:min-h-0"
                 >
                   {FONT_OPTIONS.map((font) => (
                     <option key={font.value} value={font.value} className="bg-slate-900 text-white">
@@ -390,7 +429,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                         false
                       )
                     }
-                    className="flex-1 accent-blue-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                    className="flex-1 accent-blue-500 h-2 sm:h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                   />
                   <input
                     type="number"
@@ -401,7 +440,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                       const val = Math.max(12, Math.min(120, parseInt(e.target.value, 10) || 12));
                       updateTextLayer(selectedLayer.id, { fontSize: val }, true);
                     }}
-                    className="w-14 bg-slate-900 text-slate-100 text-xs font-mono px-2 py-1 rounded-lg border border-white/15 text-center focus:outline-none focus:border-blue-500"
+                    className="w-16 sm:w-14 bg-slate-900 text-slate-100 text-base sm:text-xs font-mono px-2 py-1.5 sm:py-1 rounded-lg border border-white/15 text-center focus:outline-none focus:border-blue-500 min-h-[36px] sm:min-h-0"
                   />
                 </div>
               </div>
@@ -419,14 +458,14 @@ export const EditorPropertiesPanel: React.FC = () => {
                         true
                       )
                     }
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    className={`p-2 sm:p-1.5 min-w-[38px] min-h-[38px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
                       selectedLayer.isBold
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white'
                     }`}
                     title="Bold"
                   >
-                    <Bold className="w-3.5 h-3.5" />
+                    <Bold className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
 
                   <button
@@ -438,14 +477,14 @@ export const EditorPropertiesPanel: React.FC = () => {
                         true
                       )
                     }
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    className={`p-2 sm:p-1.5 min-w-[38px] min-h-[38px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
                       selectedLayer.isItalic
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white'
                     }`}
                     title="Italic"
                   >
-                    <Italic className="w-3.5 h-3.5" />
+                    <Italic className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
 
                   <button
@@ -457,7 +496,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                         true
                       )
                     }
-                    className={`px-2 py-1 rounded-lg text-xs font-black transition-colors cursor-pointer ${
+                    className={`px-2.5 py-1 min-w-[38px] min-h-[38px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded-lg text-xs font-black transition-colors cursor-pointer ${
                       selectedLayer.isUppercase
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white'
@@ -475,42 +514,42 @@ export const EditorPropertiesPanel: React.FC = () => {
                     onClick={() =>
                       updateTextLayer(selectedLayer.id, { alignment: 'left' }, true)
                     }
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    className={`p-2 sm:p-1.5 min-w-[38px] min-h-[38px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
                       selectedLayer.alignment === 'left'
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white'
                     }`}
                     title="Align Left"
                   >
-                    <AlignLeft className="w-3.5 h-3.5" />
+                    <AlignLeft className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() =>
                       updateTextLayer(selectedLayer.id, { alignment: 'center' }, true)
                     }
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    className={`p-2 sm:p-1.5 min-w-[38px] min-h-[38px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
                       selectedLayer.alignment === 'center'
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white'
                     }`}
                     title="Align Center"
                   >
-                    <AlignCenter className="w-3.5 h-3.5" />
+                    <AlignCenter className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() =>
                       updateTextLayer(selectedLayer.id, { alignment: 'right' }, true)
                     }
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    className={`p-2 sm:p-1.5 min-w-[38px] min-h-[38px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
                       selectedLayer.alignment === 'right'
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white'
                     }`}
                     title="Align Right"
                   >
-                    <AlignRight className="w-3.5 h-3.5" />
+                    <AlignRight className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
                 </div>
               </div>
@@ -527,7 +566,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                       {selectedLayer.color}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {PRESET_COLORS.map((c) => (
                       <button
                         key={c}
@@ -535,7 +574,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                         onClick={() =>
                           updateTextLayer(selectedLayer.id, { color: c }, true)
                         }
-                        className={`w-6 h-6 rounded-md border transition-transform cursor-pointer hover:scale-110 ${
+                        className={`w-7 h-7 sm:w-6 sm:h-6 rounded-lg border transition-transform cursor-pointer hover:scale-110 shrink-0 ${
                           selectedLayer.color.toLowerCase() === c.toLowerCase()
                             ? 'border-cyan-400 ring-2 ring-cyan-400/50 scale-105'
                             : 'border-white/20'
@@ -550,7 +589,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                       onChange={(e) =>
                         updateTextLayer(selectedLayer.id, { color: e.target.value }, true)
                       }
-                      className="w-6 h-6 rounded-md border border-white/20 bg-transparent cursor-pointer"
+                      className="w-7 h-7 sm:w-6 sm:h-6 rounded-lg border border-white/20 bg-transparent cursor-pointer shrink-0"
                       title="Custom text color"
                     />
                   </div>
@@ -564,7 +603,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                       {selectedLayer.strokeColor}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {PRESET_COLORS.map((c) => (
                       <button
                         key={c}
@@ -572,7 +611,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                         onClick={() =>
                           updateTextLayer(selectedLayer.id, { strokeColor: c }, true)
                         }
-                        className={`w-6 h-6 rounded-md border transition-transform cursor-pointer hover:scale-110 ${
+                        className={`w-7 h-7 sm:w-6 sm:h-6 rounded-lg border transition-transform cursor-pointer hover:scale-110 shrink-0 ${
                           selectedLayer.strokeColor.toLowerCase() === c.toLowerCase()
                             ? 'border-cyan-400 ring-2 ring-cyan-400/50 scale-105'
                             : 'border-white/20'
@@ -591,7 +630,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                           true
                         )
                       }
-                      className="w-6 h-6 rounded-md border border-white/20 bg-transparent cursor-pointer"
+                      className="w-7 h-7 sm:w-6 sm:h-6 rounded-lg border border-white/20 bg-transparent cursor-pointer shrink-0"
                       title="Custom stroke color"
                     />
                   </div>
@@ -646,7 +685,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                           onClick={() =>
                             updateTextLayer(selectedLayer.id, { rotation: 0 }, true)
                           }
-                          className="text-[10px] text-slate-400 hover:text-white underline cursor-pointer"
+                          className="text-[11px] text-slate-400 hover:text-white underline cursor-pointer p-1 min-h-[28px] flex items-center"
                         >
                           Reset
                         </button>
@@ -671,7 +710,7 @@ export const EditorPropertiesPanel: React.FC = () => {
                         false
                       )
                     }
-                    className="w-full accent-blue-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                    className="w-full accent-blue-500 h-2 sm:h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                   />
                 </div>
               </div>
@@ -680,16 +719,16 @@ export const EditorPropertiesPanel: React.FC = () => {
         ) : (
           /* Empty selection placeholder */
           <div className="p-6 rounded-2xl bg-slate-900/40 border border-dashed border-white/10 text-center space-y-3">
-            <Sparkles className="w-8 h-8 text-blue-400 mx-auto" />
+            <Layers className="w-8 h-8 text-blue-400 mx-auto" />
             <p className="text-xs text-slate-300 font-medium">
               Click any text on the meme canvas or layer list above to edit fonts, colors, and positioning.
             </p>
             <button
               type="button"
               onClick={() => addTextLayer()}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold shadow-md transition-colors cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-4 h-4" />
               <span>Add New Caption Layer</span>
             </button>
           </div>

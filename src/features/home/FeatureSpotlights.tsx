@@ -63,18 +63,18 @@ export const FeatureSpotlights: React.FC = () => {
         </div>
 
         {/* Text Details */}
-        <div className="lg:col-span-6 space-y-5 text-left">
+        <div className="lg:col-span-6 space-y-5 text-center lg:text-left flex flex-col items-center lg:items-start">
           <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform">
             <Type className="w-5 h-5" />
           </div>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-center lg:text-left">
             200+ Viral Fonts with Pixel-Perfect Outlines
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed text-center lg:text-left max-w-xl">
             Never struggle with unreadable text again. Our smart text rendering engine automatically adjusts outline thickness, vertical spacing, and character kerning for maximum punchiness.
           </p>
 
-          <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
+          <ul className="space-y-2.5 text-xs text-slate-700 font-medium text-left inline-block">
             <li className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Classic Impact, Bebas Neue, Comic Sans, Inter, and retro pixel fonts</span>
@@ -94,18 +94,18 @@ export const FeatureSpotlights: React.FC = () => {
       {/* Row 2: Sticker & Emoji Vault (Reversed on desktop) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
         {/* Text Details */}
-        <div className="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
+        <div className="lg:col-span-6 space-y-5 text-center lg:text-left order-2 lg:order-1 flex flex-col items-center lg:items-start">
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform">
             <Smile className="w-5 h-5" />
           </div>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-center lg:text-left">
             Infinite Stickers, Laser Eyes & Reaction Packs
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed text-center lg:text-left max-w-xl">
             Elevate any photo with classic internet reaction stickers. Add glowing red laser eyes, pixelated thug-life sunglasses, Wojaks, Pepe masks, speech bubbles, and custom emoji layers.
           </p>
 
-          <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
+          <ul className="space-y-2.5 text-xs text-slate-700 font-medium text-left inline-block">
             <li className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
               <span>One-click laser eyes with adjustable glow and angle</span>
@@ -133,7 +133,7 @@ export const FeatureSpotlights: React.FC = () => {
 
             {/* Sticker Tray Grid */}
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5 py-4">
-              {['🕶️', '🔥', '👑', '💯', '😂', '💀', '👀', '🚨', '🚀', '⚡', '✨', '🎯'].map((emoji, idx) => (
+              {['🕶️', '🔥', '👑', '💯', '😂', '💀', '👀', '🚨', '🚀', '⚡', '💥', '🎯'].map((emoji, idx) => (
                 <div
                   key={idx}
                   className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-xl hover:scale-125 hover:-rotate-6 hover:bg-amber-50 hover:border-amber-300 hover:shadow-md active:scale-95 transition-all cursor-pointer shadow-2xs"
@@ -197,18 +197,18 @@ export const FeatureSpotlights: React.FC = () => {
         </div>
 
         {/* Text Details */}
-        <div className="lg:col-span-6 space-y-5 text-left">
+        <div className="lg:col-span-6 space-y-5 text-center lg:text-left flex flex-col items-center lg:items-start">
           <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
             <Video className="w-5 h-5" />
           </div>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-center lg:text-left">
             Animated GIF Generator & Smart Compressor
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed text-center lg:text-left max-w-xl">
             Turn short video clips, screen captures, and live photos into lightweight looping GIFs optimized for Discord, Slack, and X without hitting upload file size limits.
           </p>
 
-          <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
+          <ul className="space-y-2.5 text-xs text-slate-700 font-medium text-left inline-block">
             <li className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0" />
               <span>Trim video clips to the exact microsecond for punchy timing</span>

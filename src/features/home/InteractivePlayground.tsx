@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Download, Copy, Check, ArrowRight, Wand2, RefreshCw, ImageOff } from 'lucide-react';
+import { Download, Copy, Check, ArrowRight, Wand2, RefreshCw, ImageOff } from 'lucide-react';
 import { POPULAR_TEMPLATES } from '../../constants/templates';
 import type { MemeTemplate } from '../../types/template';
 import { useTemplateStore } from '../../stores/useTemplateStore';
@@ -210,9 +210,9 @@ export const InteractivePlayground: React.FC = () => {
                 size="sm"
                 onClick={handleCopy}
                 leftIcon={copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                className="flex-1"
+                className="flex-1 min-h-[42px]"
               >
-                {copied ? 'Copied Link' : 'Copy'}
+                {copied ? 'Copied' : 'Copy'}
               </Button>
 
               <Button
@@ -220,7 +220,7 @@ export const InteractivePlayground: React.FC = () => {
                 size="sm"
                 onClick={handleDownload}
                 leftIcon={downloaded ? <Check className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
-                className="flex-1"
+                className="flex-1 min-h-[42px]"
               >
                 {downloaded ? 'Saved!' : 'Download'}
               </Button>
@@ -230,7 +230,7 @@ export const InteractivePlayground: React.FC = () => {
                 size="sm"
                 onClick={handleOpenStudio}
                 rightIcon={<ArrowRight className="w-3 h-3" />}
-                className="bg-slate-900 text-white hover:bg-slate-800"
+                className="bg-slate-900 text-white hover:bg-slate-800 min-h-[42px]"
                 title="Open in full studio"
               >
                 Studio
@@ -257,7 +257,7 @@ export const InteractivePlayground: React.FC = () => {
                       setLocalTemplate(template);
                       setSelectedTemplate(template);
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer min-h-[36px] flex items-center ${
                       isActive
                         ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20'
                         : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
@@ -271,7 +271,7 @@ export const InteractivePlayground: React.FC = () => {
               {!starterTemplates.some((t) => t.id === activeTemplate.id) && (
                 <button
                   type="button"
-                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20"
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm shadow-blue-600/30 ring-2 ring-blue-600/20 min-h-[36px] flex items-center"
                 >
                   {activeTemplate.name}
                 </button>
@@ -340,7 +340,7 @@ export const InteractivePlayground: React.FC = () => {
           {/* Helper hint with Studio link */}
           <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100/80 text-xs text-blue-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <Wand2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <p>
                 Want advanced text dragging, custom fonts, outlines, and multi-layer captions? Launch the <strong>Meme Studio Editor</strong>.
               </p>
