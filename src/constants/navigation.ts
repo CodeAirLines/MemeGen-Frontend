@@ -10,7 +10,7 @@ export const MAIN_NAV_LINKS: NavLink[] = [
   { label: 'Templates', href: '#templates' },
   { label: 'GIF Maker', href: '#gif-maker' },
   { label: 'AI Tools', href: '#ai-tools' },
-  { label: 'Explore', href: '#explore' },
+  { label: 'Community', href: '#community' },
 ];
 
 export const FOOTER_PRODUCT_LINKS = [
@@ -21,7 +21,7 @@ export const FOOTER_PRODUCT_LINKS = [
   { label: 'Templates', href: '#templates' },
   { label: 'GIF Maker', href: '#gif-maker' },
   { label: 'AI Tools', href: '#ai-tools' },
-  { label: 'Explore', href: '#explore' },
+  { label: 'Community', href: '#community' },
 ];
 
 export const FOOTER_COMPANY_LINKS = [

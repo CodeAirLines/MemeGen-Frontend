@@ -7,6 +7,7 @@ import { EditorPage } from './pages/EditorPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { DraftsPage } from './pages/DraftsPage';
 import { GifGeneratorPage } from './pages/GifGeneratorPage';
+import { CommunityPage } from './pages/CommunityPage';
 import { AuthModal } from './features/auth/AuthModal';
 import { useTemplateStore } from './stores/useTemplateStore';
 import { useAuthStore } from './stores/useAuthStore';
@@ -139,6 +140,8 @@ export const App: React.FC = () => {
           )
         ) : route === 'gif-generator' ? (
           <GifGeneratorPage onNavigate={navigate} />
+        ) : route === 'community' ? (
+          <CommunityPage onNavigate={navigate} />
         ) : (
           <HomePage onNavigate={navigate} />
         )}

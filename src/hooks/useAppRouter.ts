@@ -7,7 +7,8 @@ export type AppRoute =
   | 'editor'
   | 'profile'
   | 'drafts'
-  | 'gif-generator';
+  | 'gif-generator'
+  | 'community';
 
 function getCurrentRoute(): AppRoute {
   if (typeof window === 'undefined') return 'home';
@@ -38,6 +39,15 @@ function getCurrentRoute(): AppRoute {
     pathname.startsWith('/gif-')
   ) {
     return 'gif-generator';
+  }
+  if (
+    pathname === '/community' ||
+    hash === '#community' ||
+    pathname === '/explore' ||
+    hash === '#explore' ||
+    pathname.startsWith('/community')
+  ) {
+    return 'community';
   }
 
   return 'home';
@@ -97,17 +107,59 @@ export function useAppRouter() {
       window.history.pushState({}, '', '/gif-maker');
       setRoute('gif-generator');
       if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (normalized === '/' || normalized === '#home') {
+    } else if (
+      normalized === '/ai-tools' ||
+      normalized === '#ai-tools' ||
+      normalized === '/ai-assistant' ||
+      normalized === '#ai-assistant'
+    ) {
+      window.history.pushState({}, '', '/#ai-tools');
+      setRoute('home');
+      setTimeout(() => {
+        const el = document.getElementById('ai-tools');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 50);
+    } else if (
+      normalized === '/' ||
+      normalized === '#home' ||
+      normalized === '/#home' ||
+      normalized === '/home' ||
+      normalized === 'home'
+    ) {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+      }
       window.history.pushState({}, '', '/');
       setRoute('home');
-      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (shouldScroll) {
+        const scrollToHome = () => {
+          if (typeof document !== 'undefined') {
+            document.body.style.overflow = '';
+            const homeEl = document.getElementById('home');
+            if (homeEl) {
+              homeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+            document.body.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        };
+        scrollToHome();
+        setTimeout(scrollToHome, 50);
+        setTimeout(scrollToHome, 150);
+      }
     } else if (to.startsWith('#')) {
       // Anchor link on home page
       window.history.pushState({}, '', '/' + to);
       setRoute('home');
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+      }
       const el = document.querySelector(to);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } else {
       window.history.pushState({}, '', to);

@@ -10,6 +10,7 @@ import {
   Layers,
   Loader2,
   Bookmark,
+  Sparkles,
 } from 'lucide-react';
 import { useEditorStore } from '../../stores/useEditorStore';
 import { useDraftStore } from '../../stores/useDraftStore';
@@ -18,9 +19,14 @@ import { useTemplateStore } from '../../stores/useTemplateStore';
 interface EditorToolbarProps {
   onBack: () => void;
   onExport: () => void;
+  onOpenAiModal?: () => void;
 }
 
-export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }) => {
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({
+  onBack,
+  onExport,
+  onOpenAiModal,
+}) => {
   const memeTitle = useEditorStore((state) => state.memeTitle);
   const setMemeTitle = useEditorStore((state) => state.setMemeTitle);
   const activeTemplate = useEditorStore((state) => state.activeTemplate);
@@ -219,6 +225,20 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ onBack, onExport }
           <Layers className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
           <span className="hidden sm:inline">Templates</span>
         </button>
+
+        {/* AI Magic Button */}
+        {onOpenAiModal && (
+          <button
+            type="button"
+            onClick={onOpenAiModal}
+            className="p-1.5 xs:p-2 sm:px-3 sm:py-1.5 rounded-xl border border-cyan-500/40 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-200 hover:text-white transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-semibold gap-1.5 shadow-2xs"
+            title="AI Meme Caption Assistant"
+            aria-label="Open AI Caption Assistant"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-cyan-300 shrink-0" />
+            <span className="hidden sm:inline">AI Magic</span>
+          </button>
+        )}
 
         {/* Save Draft Button */}
         <button

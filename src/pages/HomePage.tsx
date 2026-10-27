@@ -35,6 +35,7 @@ import { PricingSection } from '../features/home/PricingSection';
 import { TrendingArticles } from '../features/home/TrendingArticles';
 import { MemeProTips } from '../features/home/MemeProTips';
 import { CommunityBanner } from '../features/home/CommunityBanner';
+import { AiAssistantSection } from '../features/ai-assistant';
 
 export interface HomePageProps {
   onNavigate?: (route: string) => void;
@@ -44,9 +45,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const setSelectedTemplate = useTemplateStore((state) => state.setSelectedTemplate);
   const openPreview = useTemplateStore((state) => state.openPreview);
 
-  // AI Meme Generator interactive prompt state
-  const [aiPrompt, setAiPrompt] = useState('A cat working on a laptop, looking stressed...');
-  const [aiGenerated, setAiGenerated] = useState(false);
   const [selectedCommunityMeme, setSelectedCommunityMeme] = useState<CommunityMeme | null>(null);
 
   const handleSelectStarter = () => {
@@ -54,16 +52,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       setSelectedTemplate(POPULAR_TEMPLATES[0]);
       openPreview(POPULAR_TEMPLATES[0]);
     }
-  };
-
-  const handleAiTagClick = (tag: string) => {
-    setAiPrompt(`A ${tag} meme about everyday life...`);
-  };
-
-  const handleGenerateAi = (e: React.FormEvent) => {
-    e.preventDefault();
-    setAiGenerated(true);
-    setTimeout(() => setAiGenerated(false), 3000);
   };
 
   return (
@@ -510,132 +498,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <InteractivePlayground />
 
         {/* ============================================================== */}
-        {/* 5. CREATE MEMES WITH AI SECTION                                */}
+        {/* 5. CREATE MEMES WITH AI SECTION (DAY 6 AI MEME ASSISTANT)      */}
         {/* ============================================================== */}
-        <section
-          id="ai-tools"
-          className="scroll-mt-24 bg-[#eef5ff] border border-blue-100 rounded-3xl p-6 sm:p-10 lg:p-12 overflow-hidden"
-          aria-label="Create Memes with AI"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Form & Prompt inputs */}
-            <div className="lg:col-span-7 space-y-5 text-left">
-              {/* Pill */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-[11px] font-bold tracking-wider uppercase">
-                <Wand2 className="w-3.5 h-3.5" />
-                <span>POWERED BY AI</span>
-              </div>
-
-              {/* Title */}
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                Create Memes with AI
-              </h2>
-
-              {/* Description */}
-              <p className="text-sm text-slate-600 max-w-lg leading-relaxed">
-                Turn your ideas into memes instantly. Just type a prompt and let AI do the magic.
-              </p>
-
-              {/* Prompt Input Box */}
-              <form onSubmit={handleGenerateAi} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2">
-                <input
-                  type="text"
-                  value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
-                  placeholder="A cat working on a laptop, looking stressed..."
-                  className="flex-1 bg-white text-slate-900 placeholder-slate-400 text-base sm:text-sm rounded-xl px-4 py-3 border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 shadow-sm transition-all min-h-[46px]"
-                />
-                <button
-                  type="submit"
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm px-5 py-3 rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/30 hover:shadow-lg hover:shadow-blue-600/50 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer min-h-[46px] shrink-0"
-                >
-                  <span>{aiGenerated ? 'Generated!' : 'Generate Meme'}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </form>
-
-              {/* Prompt Suggestions */}
-              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                {['funny', 'relatable', 'work', 'gaming', 'animals', 'reactions'].map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => handleAiTagClick(tag)}
-                    className="px-3 py-1 rounded-lg bg-blue-100/70 hover:bg-blue-600 text-blue-700 hover:text-white font-medium hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-3xs"
-                  >
-                    #{tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Column: AI Cat Generation Display */}
-            <div className="lg:col-span-5 relative flex items-center justify-center pt-6 lg:pt-0">
-              {/* Speech bubble pointer */}
-              <div className="absolute -top-7 left-4 sm:left-8 bg-white border border-slate-200/90 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-800 shadow-md z-20 flex items-center gap-2 animate-float">
-                <span className="truncate max-w-[220px] sm:max-w-xs">{aiPrompt}</span>
-                {/* Curved down arrow pointing to cat */}
-                <svg
-                  className="w-4 h-4 text-blue-500 absolute -bottom-3 left-6 rotate-12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 5v14M19 12l-7 7-7-7" />
-                </svg>
-              </div>
-
-              {/* Main Cat Meme Image */}
-              <div className="flex items-center gap-3 w-full">
-                <div className="flex-1 rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-md aspect-square relative group hover:shadow-xl transition-all duration-300 cursor-pointer">
-                  <img
-                    src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&auto=format&fit=crop&q=80"
-                    alt="AI Generated Cat on Laptop Meme"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  {aiGenerated && (
-                    <div className="absolute inset-0 bg-blue-900/60 backdrop-blur-xs flex flex-col items-center justify-center text-white p-4 text-center animate-in fade-in">
-                      <Wand2 className="w-8 h-8 text-cyan-300 animate-pulse mb-2" />
-                      <span className="font-bold text-sm">AI Meme Generated!</span>
-                      <span className="text-xs text-blue-100 mt-1">Ready to edit or download</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Vertical thumbnail variants */}
-                <div className="w-20 sm:w-24 flex flex-col gap-2">
-                  <div className="rounded-xl overflow-hidden aspect-square border border-slate-200 bg-white hover:border-blue-500 hover:scale-105 hover:shadow-md transition-all duration-200 cursor-pointer">
-                    <img
-                      src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200&auto=format&fit=crop&q=80"
-                      alt="Variation 1"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="rounded-xl overflow-hidden aspect-square border border-slate-200 bg-white hover:border-blue-500 hover:scale-105 hover:shadow-md transition-all duration-200 cursor-pointer">
-                    <img
-                      src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=200&auto=format&fit=crop&q=80"
-                      alt="Variation 2"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="relative rounded-xl overflow-hidden aspect-square border border-slate-200 bg-slate-900 cursor-pointer flex items-center justify-center group hover:scale-105 hover:border-blue-500 transition-all duration-200">
-                    <img
-                      src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=200&auto=format&fit=crop&q=80"
-                      alt="Variation 3"
-                      className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xs group-hover:text-cyan-300 transition-colors">
-                      + 7 more
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <AiAssistantSection onNavigate={onNavigate} />
 
         {/* ============================================================== */}
         {/* 6. TRENDING MEME UNIVERSES & CATEGORIES                        */}
@@ -737,10 +602,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               Latest Memes from Our Community
             </h2>
             <a
-              href="#explore"
-              className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group"
+              href="#community"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('/community');
+                }
+              }}
+              className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group cursor-pointer"
             >
-              <span>View More</span>
+              <span>Explore Community Feed</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>

@@ -4,6 +4,7 @@ import { MemeCanvas } from './MemeCanvas';
 import { EditorPropertiesPanel } from './EditorPropertiesPanel';
 import { ResetConfirmModal } from './ResetConfirmModal';
 import { TemplatePickerModal } from './TemplatePickerModal';
+import { AiEditorModal } from '../ai-assistant';
 import { exportMemeAsPng } from './exportMeme';
 import { useEditorStore } from '../../stores/useEditorStore';
 import { useTemplateStore } from '../../stores/useTemplateStore';
@@ -43,6 +44,7 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
   const isTemplatePickerOpen = useEditorStore((state) => state.isTemplatePickerOpen);
   const setIsResetModalOpen = useEditorStore((state) => state.setIsResetModalOpen);
   const setIsTemplatePickerOpen = useEditorStore((state) => state.setIsTemplatePickerOpen);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
   // -------------------------------------------------------------
   // Keyboard Shortcuts (Undo, Redo, Delete layer, Zoom, Escape)
@@ -59,6 +61,10 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
 
       // Escape key: close open modal first, otherwise deselect layer
       if (e.key === 'Escape') {
+        if (isAiModalOpen) {
+          setIsAiModalOpen(false);
+          return;
+        }
         if (isResetModalOpen) {
           setIsResetModalOpen(false);
           return;
@@ -74,7 +80,7 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
       }
 
       // Do not trigger canvas/editor shortcuts while typing or while modal dialog is open
-      if (isInput || isResetModalOpen || isTemplatePickerOpen) {
+      if (isInput || isResetModalOpen || isTemplatePickerOpen || isAiModalOpen) {
         return;
       }
 
@@ -135,8 +141,10 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
     resetZoom,
     isResetModalOpen,
     isTemplatePickerOpen,
+    isAiModalOpen,
     setIsResetModalOpen,
     setIsTemplatePickerOpen,
+    setIsAiModalOpen,
   ]);
 
   // -------------------------------------------------------------
@@ -180,7 +188,11 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
   return (
     <div className="flex flex-col h-[100dvh] w-full max-w-[100vw] bg-[#070d1e] text-slate-100 overflow-hidden select-none">
       {/* Top Toolbar */}
-      <EditorToolbar onBack={onBack} onExport={handleExport} />
+      <EditorToolbar
+        onBack={onBack}
+        onExport={handleExport}
+        onOpenAiModal={() => setIsAiModalOpen(true)}
+      />
 
       {/* Main Studio Body: Canvas + Properties Panel */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative min-h-0 min-w-0">
@@ -194,12 +206,13 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
         </main>
 
         {/* Right / Bottom Properties Controls Panel */}
-        <EditorPropertiesPanel />
+        <EditorPropertiesPanel onOpenAiModal={() => setIsAiModalOpen(true)} />
       </div>
 
       {/* Confirmation & Template Switcher Modals */}
       <ResetConfirmModal />
       <TemplatePickerModal />
+      <AiEditorModal isOpen={isAiModalOpen} onClose={() => setIsAiModalOpen(false)} />
     </div>
   );
 };

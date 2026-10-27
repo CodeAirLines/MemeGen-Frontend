@@ -51,6 +51,47 @@ Before connecting live API endpoints in subsequent days, please confirm:
 | `POST` | `/api/v1/auth/logout` | Revoke session | Yes |
 | `GET` | `/api/v1/auth/me` | Fetch active user profile and created memes count | Yes |
 
+### AI Meme Assistant & Caption Generation (Day 6)
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| `POST` | `/api/v1/ai/generate-captions` | Generate AI meme captions from prompt, tone, and language | Optional |
+| `GET` | `/api/v1/ai/idea-prompts` | Retrieve curated category prompt ideas | No |
+
+#### AI Generation Request Payload Example
+```json
+{
+  "prompt": "When the code compiles on the first try but crashes in production",
+  "tone": "funny",
+  "language": "en",
+  "category": "work",
+  "count": 4
+}
+```
+
+#### AI Generation Success Response
+```json
+{
+  "success": true,
+  "data": {
+    "isDemo": false,
+    "provider": "Gemini 2.5 Flash Server Proxy",
+    "captions": [
+      {
+        "id": "caption-101",
+        "topText": "Me thinking I fixed all bugs",
+        "bottomText": "Production log with 1,200 errors",
+        "singleText": "Me thinking I fixed all bugs until production logs entered the chat.",
+        "tone": "funny",
+        "language": "en",
+        "category": "work"
+      }
+    ]
+  }
+}
+```
+
+> **Security Rule**: API keys (Gemini, OpenAI, Anthropic) must strictly reside in server environment variables on Nithish's backend. The frontend client calls `/api/v1/ai/generate-captions` and never exposes LLM secrets.
+
 ---
 
 ## 3. Standard JSON Response Envelope

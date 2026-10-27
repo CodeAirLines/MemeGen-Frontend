@@ -107,6 +107,12 @@ interface EditorStoreState {
   setIsResetModalOpen: (open: boolean) => void;
   setIsTemplatePickerOpen: (open: boolean) => void;
   setIsExporting: (exporting: boolean) => void;
+  applyAiCaption: (options: {
+    text: string;
+    mode?: 'replace' | 'new';
+    topText?: string;
+    bottomText?: string;
+  }) => void;
 }
 
 export const useEditorStore = create<EditorStoreState>((set, get) => {
@@ -504,6 +510,75 @@ export const useEditorStore = create<EditorStoreState>((set, get) => {
 
     setIsExporting: (exporting) => {
       set({ isExporting: exporting });
+    },
+
+    applyAiCaption: ({ text, mode = 'replace', topText, bottomText }) => {
+      const state = get();
+      const snapshot: EditorHistoryEntry = {
+        textLayers: JSON.parse(JSON.stringify(state.textLayers)),
+        memeTitle: state.memeTitle,
+      };
+
+      // If user has top & bottom captions generated and at least 2 layers exist and mode is 'replace'
+      if (mode === 'replace' && topText && bottomText && state.textLayers.length >= 2) {
+        const updatedLayers = [...state.textLayers];
+        updatedLayers[0] = { ...updatedLayers[0], text: topText };
+        updatedLayers[1] = { ...updatedLayers[1], text: bottomText };
+        set({
+          textLayers: updatedLayers,
+          history: {
+            past: [...state.history.past.slice(-MAX_HISTORY + 1), snapshot],
+            future: [],
+          },
+        });
+        return;
+      }
+
+      // If replacing active selected layer or first layer
+      if (mode === 'replace' && state.textLayers.length > 0) {
+        const targetId = state.selectedLayerId || state.textLayers[0].id;
+        const updatedLayers = state.textLayers.map((l) =>
+          l.id === targetId ? { ...l, text } : l
+        );
+        set({
+          textLayers: updatedLayers,
+          selectedLayerId: targetId,
+          history: {
+            past: [...state.history.past.slice(-MAX_HISTORY + 1), snapshot],
+            future: [],
+          },
+        });
+        return;
+      }
+
+      // Default / fallback / 'new' mode: add as new layer
+      const newId = `layer-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+      const newLayer: TextLayer = {
+        id: newId,
+        text,
+        xPercent: 50,
+        yPercent: state.textLayers.length === 0 ? 50 : Math.min(85, 30 + state.textLayers.length * 15),
+        fontSize: 34,
+        color: '#FFFFFF',
+        strokeColor: '#000000',
+        strokeWidth: 3,
+        isBold: true,
+        isItalic: false,
+        isUppercase: true,
+        alignment: 'center',
+        fontFamily: 'Impact',
+        rotation: 0,
+        opacity: 1,
+      };
+
+      set({
+        textLayers: [...state.textLayers, newLayer],
+        selectedLayerId: newId,
+        history: {
+          past: [...state.history.past.slice(-MAX_HISTORY + 1), snapshot],
+          future: [],
+        },
+      });
     },
   };
 });

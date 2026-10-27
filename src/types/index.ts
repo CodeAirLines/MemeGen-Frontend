@@ -4,4 +4,5 @@ export * from './editor';
 export * from './auth';
 export * from './draft';
 export * from './profile';
+export * from './ai';
 export * from '../features/gif-generator/types/gif';

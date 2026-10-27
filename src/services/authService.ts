@@ -97,9 +97,7 @@ export const authService = {
     return payload;
   },
 
-  /**
-   * Submit registration payload to backend auth endpoint or development adapter.
-   */
+  
   async signUp(credentials: SignUpCredentials): Promise<AuthSuccessPayload> {
     if (this.isBackendConfigured()) {
       const response = await apiRequest<ApiResponse<AuthSuccessPayload>>('/auth/register', {
@@ -193,7 +191,7 @@ export const authService = {
         return null;
       }
 
-      // Check real backend session if configured
+ 
       if (this.isBackendConfigured()) {
         try {
           const res = await apiRequest<ApiResponse<AuthUser>>('/auth/me');
