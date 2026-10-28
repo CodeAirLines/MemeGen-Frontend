@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, ArrowLeft, Bookmark, HardDrive } from 'lucide-react';
+import { Plus, ArrowLeft, Bookmark, HardDrive, RefreshCw } from 'lucide-react';
 import { Container } from '../components/ui/Container';
 import { Button } from '../components/ui/Button';
 import { DraftGrid } from '../features/drafts/DraftGrid';
@@ -20,6 +20,15 @@ export const DraftsPage: React.FC<DraftsPageProps> = ({ onNavigate }) => {
       onNavigate('/login');
     }
   }, [isAuthLoading, isAuthenticated, onNavigate]);
+
+  if (isAuthLoading && !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-50/70 pt-32 pb-20 flex flex-col items-center justify-center gap-3 text-slate-400">
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+        <p className="text-sm font-medium">Checking creator session...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50/70 pt-24 sm:pt-28 pb-20">

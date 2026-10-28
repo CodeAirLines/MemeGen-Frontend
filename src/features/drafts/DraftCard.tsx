@@ -109,10 +109,10 @@ export const DraftCard: React.FC<DraftCardProps> = ({ draft, onNavigate }) => {
         }}
         className="relative aspect-[16/11] w-full bg-slate-900 overflow-hidden cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
       >
-        {!imageError ? (
+        {!imageError && draft.template?.imageUrl ? (
           <img
             src={draft.template.imageUrl}
-            alt={draft.title}
+            alt={draft.title || 'Meme Draft'}
             loading="lazy"
             onError={() => setImageError(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
@@ -120,13 +120,13 @@ export const DraftCard: React.FC<DraftCardProps> = ({ draft, onNavigate }) => {
         ) : (
           <div className="flex flex-col items-center justify-center p-4 text-center text-slate-400 bg-slate-950 w-full h-full">
             <ImageOff className="w-8 h-8 text-slate-500 mb-1.5" />
-            <span className="text-xs font-semibold text-slate-300 line-clamp-1">{draft.title}</span>
+            <span className="text-xs font-semibold text-slate-300 line-clamp-1">{draft.title || 'Untitled Draft'}</span>
             <span className="text-[10px] text-slate-500">Preview unavailable</span>
           </div>
         )}
 
         {/* Render text layer preview highlights */}
-        {draft.textLayers.slice(0, 3).map((layer) => (
+        {(draft.textLayers || []).slice(0, 3).map((layer) => (
           <div
             key={layer.id}
             className="absolute pointer-events-none transform -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 max-w-[85%] truncate text-center font-black uppercase text-[10px] sm:text-xs tracking-wide"
@@ -153,14 +153,14 @@ export const DraftCard: React.FC<DraftCardProps> = ({ draft, onNavigate }) => {
         <div className="absolute top-2.5 left-2.5 pointer-events-none">
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-950/80 text-white backdrop-blur-xs border border-white/10 shadow-xs">
             <Layers className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
-            <span className="truncate max-w-[120px]">{draft.template.name}</span>
+            <span className="truncate max-w-[120px]">{draft.template?.name || 'Meme Template'}</span>
           </span>
         </div>
 
         {/* Layer count badge */}
         <div className="absolute bottom-2.5 right-2.5 pointer-events-none">
           <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-900/80 text-slate-200 backdrop-blur-xs">
-            {draft.textLayers.length} {draft.textLayers.length === 1 ? 'layer' : 'layers'}
+            {(draft.textLayers || []).length} {(draft.textLayers || []).length === 1 ? 'layer' : 'layers'}
           </span>
         </div>
       </div>

@@ -8,7 +8,8 @@ export type AppRoute =
   | 'profile'
   | 'drafts'
   | 'gif-generator'
-  | 'community';
+  | 'community'
+  | 'not-found';
 
 function getCurrentRoute(): AppRoute {
   if (typeof window === 'undefined') return 'home';
@@ -36,6 +37,9 @@ function getCurrentRoute(): AppRoute {
     hash === '#gif-maker' ||
     pathname === '/gif-generator' ||
     hash === '#gif-generator' ||
+    pathname === '/gif' ||
+    hash === '#gif' ||
+    pathname === '/gifmaker' ||
     pathname.startsWith('/gif-')
   ) {
     return 'gif-generator';
@@ -50,7 +54,32 @@ function getCurrentRoute(): AppRoute {
     return 'community';
   }
 
-  return 'home';
+  // Known home paths, templates section, AI tools, and root anchor links
+  if (
+    pathname === '/' ||
+    pathname === '' ||
+    pathname === '/home' ||
+    pathname === '/index.html' ||
+    pathname === '/templates' ||
+    hash === '#templates' ||
+    pathname === '/ai-tools' ||
+    hash === '#ai-tools' ||
+    pathname === '/ai-assistant' ||
+    hash === '#ai-assistant'
+  ) {
+    return 'home';
+  }
+
+  if (hash === '#home') {
+    return 'home';
+  }
+
+  // If on root path with an anchor link (e.g. #templates, #ai-tools, #about)
+  if (pathname === '/' && hash.startsWith('#')) {
+    return 'home';
+  }
+
+  return 'not-found';
 }
 
 export function useAppRouter() {
@@ -102,11 +131,45 @@ export function useAppRouter() {
       normalized === '#gif-maker' ||
       normalized === '/gif-generator' ||
       normalized === '#gif-generator' ||
+      normalized === '/gif' ||
+      normalized === '#gif' ||
+      normalized === '/gifmaker' ||
       normalized.startsWith('/gif-')
     ) {
       window.history.pushState({}, '', '/gif-maker');
       setRoute('gif-generator');
       if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/community' ||
+      normalized === '#community' ||
+      normalized === '/explore' ||
+      normalized === '#explore' ||
+      normalized.startsWith('/community')
+    ) {
+      window.history.pushState({}, '', '/community');
+      setRoute('community');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/404' ||
+      normalized === '#404' ||
+      normalized === '/not-found' ||
+      normalized === 'not-found'
+    ) {
+      window.history.pushState({}, '', '/404');
+      setRoute('not-found');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/templates' ||
+      normalized === '#templates'
+    ) {
+      window.history.pushState({}, '', '/#templates');
+      setRoute('home');
+      setTimeout(() => {
+        const el = document.getElementById('templates');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 50);
     } else if (
       normalized === '/ai-tools' ||
       normalized === '#ai-tools' ||
@@ -141,9 +204,15 @@ export function useAppRouter() {
             if (homeEl) {
               homeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
-            document.body.scrollTo({ top: 0, behavior: 'smooth' });
+            if (typeof window.scrollTo === 'function') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            if (typeof document.documentElement?.scrollTo === 'function') {
+              document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            if (typeof document.body?.scrollTo === 'function') {
+              document.body.scrollTo({ top: 0, behavior: 'smooth' });
+            }
           }
         };
         scrollToHome();
@@ -156,10 +225,19 @@ export function useAppRouter() {
       setRoute('home');
       if (typeof document !== 'undefined') {
         document.body.style.overflow = '';
-      }
-      const el = document.querySelector(to);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const scrollToAnchor = () => {
+          try {
+            const el = document.querySelector(to);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          } catch {
+            // Safe fallback for invalid CSS selectors
+          }
+        };
+        scrollToAnchor();
+        setTimeout(scrollToAnchor, 50);
+        setTimeout(scrollToAnchor, 150);
       }
     } else {
       window.history.pushState({}, '', to);

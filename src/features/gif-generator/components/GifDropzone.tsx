@@ -247,6 +247,9 @@ export const GifDropzone: React.FC = () => {
                 <img
                   src={sample.thumbnailUrl}
                   alt={sample.title}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/shinchan-meme.jpg';
+                  }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                 />
                 <div className="absolute inset-0 bg-blue-600/10 group-hover:bg-transparent transition-colors" />

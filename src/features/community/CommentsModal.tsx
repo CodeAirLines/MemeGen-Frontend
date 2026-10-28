@@ -93,6 +93,9 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
                 src={post.author.avatarUrl || '/Profille/no-dp_16.webp'}
                 alt={post.author.name}
                 className="w-7 h-7 rounded-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = '/Profille/no-dp_16.webp';
+                }}
               />
               <span className="text-xs font-bold truncate">{post.author.name}</span>
             </div>

@@ -107,12 +107,25 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <a
                     href={link.href}
                     onClick={(e) => {
-                      if (onNavigate && (link.href === '#drafts' || link.href === '#profile' || link.href === '#create')) {
-                        e.preventDefault();
+                      if (onNavigate) {
                         if (link.href === '#create') {
+                          e.preventDefault();
                           onNavigate('/editor');
-                        } else {
-                          onNavigate(link.href.replace('#', '/'));
+                        } else if (link.href === '#drafts') {
+                          e.preventDefault();
+                          onNavigate('/drafts');
+                        } else if (link.href === '#profile') {
+                          e.preventDefault();
+                          onNavigate('/profile');
+                        } else if (link.href === '#gif-maker') {
+                          e.preventDefault();
+                          onNavigate('/gif-maker');
+                        } else if (link.href === '#community' || link.href === '#explore') {
+                          e.preventDefault();
+                          onNavigate('/community');
+                        } else if (link.href.startsWith('#')) {
+                          e.preventDefault();
+                          onNavigate(link.href);
                         }
                       }
                     }}
@@ -131,7 +144,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-2 text-xs font-medium">
               {FOOTER_COMPANY_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="hover:text-blue-600 transition-colors">
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      if (onNavigate && link.href.startsWith('#')) {
+                        e.preventDefault();
+                        onNavigate(link.href);
+                      }
+                    }}
+                    className="hover:text-blue-600 transition-colors"
+                  >
                     {link.label}
                   </a>
                 </li>
@@ -145,7 +167,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-2 text-xs font-medium">
               {FOOTER_RESOURCES_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="hover:text-blue-600 transition-colors">
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      if (onNavigate) {
+                        if (link.href === '#community' || link.href === '#explore') {
+                          e.preventDefault();
+                          onNavigate('/community');
+                        } else if (link.href.startsWith('#')) {
+                          e.preventDefault();
+                          onNavigate(link.href);
+                        }
+                      }
+                    }}
+                    className="hover:text-blue-600 transition-colors"
+                  >
                     {link.label}
                   </a>
                 </li>
@@ -197,13 +233,40 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span>English</span>
               <ChevronDown className="w-3 h-3" />
             </div>
-            <a href="#terms" className="hover:text-slate-600 transition-colors">
+            <a
+              href="#terms"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('#terms');
+                }
+              }}
+              className="hover:text-slate-600 transition-colors"
+            >
               Terms
             </a>
-            <a href="#privacy" className="hover:text-slate-600 transition-colors">
+            <a
+              href="#privacy"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('#privacy');
+                }
+              }}
+              className="hover:text-slate-600 transition-colors"
+            >
               Privacy
             </a>
-            <a href="#cookies" className="hover:text-slate-600 transition-colors">
+            <a
+              href="#cookies"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('#cookies');
+                }
+              }}
+              className="hover:text-slate-600 transition-colors"
+            >
               Cookies
             </a>
           </div>

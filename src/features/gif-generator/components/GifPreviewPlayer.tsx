@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useGifStore } from '../stores/useGifStore';
 import { useTemplateStore } from '../../../stores/useTemplateStore';
+import { useEditorStore } from '../../../stores/useEditorStore';
 import { Button } from '../../../components/ui/Button';
 import { formatFileSize } from '../../../lib/utils';
 
@@ -21,6 +22,7 @@ export const GifPreviewPlayer: React.FC<GifPreviewPlayerProps> = ({ onNavigate }
   const generatedResult = useGifStore((state) => state.generatedResult);
   const resetAll = useGifStore((state) => state.resetAll);
   const setNotification = useTemplateStore((state) => state.setNotification);
+  const loadTemplate = useEditorStore((state) => state.loadTemplate);
 
   if (!generatedResult) return null;
 
@@ -39,6 +41,20 @@ export const GifPreviewPlayer: React.FC<GifPreviewPlayerProps> = ({ onNavigate }
   };
 
   const handleOpenEditor = () => {
+    if (generatedResult) {
+      loadTemplate({
+        id: `gif-template-${Date.now()}`,
+        name: generatedResult.filename.replace(/\.gif$/i, ''),
+        imageUrl: generatedResult.url,
+        width: generatedResult.width,
+        height: generatedResult.height,
+        boxCount: 2,
+        category: 'GIF',
+        tags: ['gif', 'animation', 'custom'],
+        description: 'Generated Animated GIF Meme',
+        usageCount: 1,
+      });
+    }
     if (onNavigate) {
       onNavigate('/editor');
     }

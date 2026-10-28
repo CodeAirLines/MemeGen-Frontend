@@ -25,9 +25,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onEditClick,
   onLogout,
 }) => {
-  const [avatarError, setAvatarError] = useState(false);
+  const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const isDemoMode = useAuthStore((state) => state.isDemoMode);
 
+  const isAvatarError = Boolean(failedAvatarUrl && failedAvatarUrl === profile.avatarUrl);
 
   return (
     <div className="w-full bg-white rounded-3xl border border-slate-200/90 shadow-xs p-6 sm:p-8 lg:p-10 relative overflow-hidden">
@@ -38,9 +39,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[3px] bg-gradient-to-tr from-pink-500 via-purple-500 to-amber-400 shadow-lg">
             <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
               <img
-                src={!avatarError && profile.avatarUrl ? profile.avatarUrl : '/Profille/no-dp_16.webp'}
-                alt={profile.displayName}
-                onError={() => setAvatarError(true)}
+                src={!isAvatarError && profile.avatarUrl ? profile.avatarUrl : '/Profille/no-dp_16.webp'}
+                alt={profile.displayName ? `${profile.displayName}'s avatar` : 'Creator avatar'}
+                onError={() => setFailedAvatarUrl(profile.avatarUrl)}
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
@@ -111,13 +112,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
 
           {/* Row 3: Display Name & Bio */}
-          <div className="space-y-1.5">
-            <h2 className="font-bold text-sm sm:text-base text-slate-900">
+          <div className="space-y-1.5 min-w-0">
+            <h2 className="font-bold text-sm sm:text-base text-slate-900 truncate">
               {profile.displayName}
             </h2>
 
             {profile.bio && (
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line max-w-xl">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line max-w-xl break-words">
                 {profile.bio}
               </p>
             )}

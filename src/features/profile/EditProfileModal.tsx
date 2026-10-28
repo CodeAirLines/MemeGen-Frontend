@@ -87,6 +87,17 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ profile, onClose }) =
       newErrors.bio = 'Bio cannot exceed 160 characters.';
     }
 
+    if (formData.avatarUrl && formData.avatarUrl.trim()) {
+      const trimmedAvatar = formData.avatarUrl.trim();
+      if (
+        !trimmedAvatar.startsWith('/') &&
+        !/^https?:\/\/.+/i.test(trimmedAvatar) &&
+        !trimmedAvatar.startsWith('data:image/')
+      ) {
+        newErrors.avatarUrl = 'Avatar must be a valid web URL or local path.';
+      }
+    }
+
     if (formData.website && formData.website.trim()) {
       const trimmedWeb = formData.website.trim();
       if (!/^https?:\/\/.+/i.test(trimmedWeb) && !/^memegen\.io\/.+/i.test(trimmedWeb)) {
@@ -125,7 +136,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ profile, onClose }) =
 
       {/* Avatar Preset Selection */}
       <div className="space-y-2">
-        <label className="block text-xs font-semibold text-slate-700">
+        <label htmlFor="avatar-url" className="block text-xs font-semibold text-slate-700">
           Choose Creator Avatar
         </label>
         <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
@@ -135,7 +146,10 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ profile, onClose }) =
               <button
                 key={preset.id}
                 type="button"
-                onClick={() => setFormData((prev) => ({ ...prev, avatarUrl: preset.url }))}
+                onClick={() => {
+                  setFormData((prev) => ({ ...prev, avatarUrl: preset.url }));
+                  if (errors.avatarUrl) setErrors((prev) => ({ ...prev, avatarUrl: '' }));
+                }}
                 className={`w-12 h-12 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 relative ${
                   isSelected
                     ? 'border-blue-600 ring-2 ring-blue-500/40 scale-105 shadow-md'
@@ -164,9 +178,14 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ profile, onClose }) =
             id="avatar-url"
             type="text"
             value={formData.avatarUrl}
-            onChange={(e) => setFormData((prev) => ({ ...prev, avatarUrl: e.target.value }))}
+            onChange={(e) => {
+              const val = e.target.value;
+              setFormData((prev) => ({ ...prev, avatarUrl: val }));
+              if (errors.avatarUrl) setErrors((prev) => ({ ...prev, avatarUrl: '' }));
+            }}
             placeholder="Or paste an image URL..."
             inputSize="sm"
+            error={errors.avatarUrl}
           />
         </div>
       </div>

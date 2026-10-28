@@ -35,9 +35,7 @@ export const profileStorage = {
       email: user.email,
       bio: 'Meme creator, humor architect & visual remixer on MemeGen.',
       avatarUrl:
-        user.avatarUrl &&
-        !user.avatarUrl.includes('unsplash.com') &&
-        !user.avatarUrl.includes('google')
+        user.avatarUrl && !user.avatarUrl.includes('google')
           ? user.avatarUrl
           : DEFAULT_AVATAR_URL,
       role: user.role || 'creator',
@@ -78,12 +76,8 @@ export const profileStorage = {
         email: user.email, // Always enforce authenticated email
       };
 
-      // Normalize if previous saved profile had external/unsplash/google avatar
-      if (
-        !merged.avatarUrl ||
-        merged.avatarUrl.includes('unsplash.com') ||
-        merged.avatarUrl.includes('google')
-      ) {
+      // Ensure valid fallback avatar if empty
+      if (!merged.avatarUrl || typeof merged.avatarUrl !== 'string') {
         merged.avatarUrl = DEFAULT_AVATAR_URL;
       }
 

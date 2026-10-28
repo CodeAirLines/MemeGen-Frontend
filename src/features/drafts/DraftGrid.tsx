@@ -50,8 +50,8 @@ export const DraftGrid: React.FC<DraftGridProps> = ({
       const q = searchQuery.toLowerCase().trim();
       result = result.filter(
         (d) =>
-          d.title.toLowerCase().includes(q) ||
-          d.template.name.toLowerCase().includes(q)
+          (d.title || '').toLowerCase().includes(q) ||
+          (d.template?.name || '').toLowerCase().includes(q)
       );
     }
 
@@ -61,17 +61,17 @@ export const DraftGrid: React.FC<DraftGridProps> = ({
         case 'recently-edited': {
           const timeA = new Date(a.updatedAt || a.createdAt).getTime();
           const timeB = new Date(b.updatedAt || b.createdAt).getTime();
-          return timeB - timeA;
+          return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
         }
         case 'oldest': {
           const timeA = new Date(a.createdAt).getTime();
           const timeB = new Date(b.createdAt).getTime();
-          return timeA - timeB;
+          return (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
         }
         case 'name-asc':
-          return a.title.localeCompare(b.title);
+          return (a.title || '').localeCompare(b.title || '');
         case 'name-desc':
-          return b.title.localeCompare(a.title);
+          return (b.title || '').localeCompare(a.title || '');
         default:
           return 0;
       }

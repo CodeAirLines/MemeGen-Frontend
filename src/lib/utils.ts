@@ -27,6 +27,7 @@ export function formatCompactNumber(num: number): string {
 export function formatRelativeTime(dateString: string): string {
   try {
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Recently';
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     if (diffMs < 0) return 'Just now';

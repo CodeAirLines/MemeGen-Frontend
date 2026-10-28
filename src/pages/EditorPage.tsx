@@ -36,3 +36,5 @@ export const EditorPage: React.FC<EditorPageProps> = ({ onNavigate }) => {
 
   return <EditorStudio onBack={handleBack} />;
 };
+
+export default EditorPage;

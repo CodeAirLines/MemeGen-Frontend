@@ -57,7 +57,7 @@ export const AiCaptionCard: React.FC<AiCaptionCardProps> = ({
           </div>
         ) : (
           <p className="text-sm sm:text-base font-bold text-slate-900 leading-snug break-words">
-            "{caption.singleText}"
+            &ldquo;{caption.singleText}&rdquo;
           </p>
         )}
       </div>

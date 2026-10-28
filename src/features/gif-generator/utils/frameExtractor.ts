@@ -317,7 +317,7 @@ export const SAMPLE_GIF_CLIPS: SampleClip[] = [
     id: 'sample-kazama',
     title: 'Kazama Rage Shake',
     description: 'Frustrated rage reaction meme clip.',
-    thumbnailUrl: '/kazama.jpg',
+    thumbnailUrl: '/kazama-angry.jpg',
     duration: 2.5,
     defaultTopText: 'WHO MERGED TO MAIN',
     defaultBottomText: 'ON A FRIDAY EVENING',

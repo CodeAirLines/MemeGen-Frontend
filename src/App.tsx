@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { CheckCircle, Info, X } from 'lucide-react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
-import { EditorPage } from './pages/EditorPage';
-import { ProfilePage } from './pages/ProfilePage';
-import { DraftsPage } from './pages/DraftsPage';
-import { GifGeneratorPage } from './pages/GifGeneratorPage';
-import { CommunityPage } from './pages/CommunityPage';
+import { PageLoadingFallback } from './components/ui/PageLoadingFallback';
 import { AuthModal } from './features/auth/AuthModal';
 import { useTemplateStore } from './stores/useTemplateStore';
 import { useAuthStore } from './stores/useAuthStore';
 import { IconButton } from './components/ui/IconButton';
 import { useAppRouter } from './hooks/useAppRouter';
+
+// Code-split heavy routes to drastically reduce initial bundle size and boost initial paint performance
+const EditorPage = lazy(() => import('./pages/EditorPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const DraftsPage = lazy(() => import('./pages/DraftsPage'));
+const GifGeneratorPage = lazy(() => import('./pages/GifGeneratorPage'));
+const CommunityPage = lazy(() => import('./pages/CommunityPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 export const App: React.FC = () => {
   const { route, navigate } = useAppRouter();
@@ -50,7 +54,9 @@ export const App: React.FC = () => {
   if (route === 'editor') {
     return (
       <div className="min-h-screen bg-[#070d1e] text-slate-100 selection:bg-blue-600 selection:text-white relative">
-        <EditorPage onNavigate={navigate} />
+        <Suspense fallback={<PageLoadingFallback dark label="Launching Meme Studio..." />}>
+          <EditorPage onNavigate={navigate} />
+        </Suspense>
         {/* Floating Feedback Notification Toast */}
         {notification && (
           <aside
@@ -126,25 +132,29 @@ export const App: React.FC = () => {
 
       {/* Main Page Content */}
       <main id="main-content" className="flex-1 w-full">
-        {route === 'profile' ? (
-          isAuthenticated ? (
-            <ProfilePage onNavigate={navigate} />
+        <Suspense fallback={<PageLoadingFallback />}>
+          {route === 'profile' ? (
+            isAuthenticated || isAuthLoading ? (
+              <ProfilePage onNavigate={navigate} />
+            ) : (
+              <HomePage onNavigate={navigate} />
+            )
+          ) : route === 'drafts' ? (
+            isAuthenticated || isAuthLoading ? (
+              <DraftsPage onNavigate={navigate} />
+            ) : (
+              <HomePage onNavigate={navigate} />
+            )
+          ) : route === 'gif-generator' ? (
+            <GifGeneratorPage onNavigate={navigate} />
+          ) : route === 'community' ? (
+            <CommunityPage onNavigate={navigate} />
+          ) : route === 'not-found' ? (
+            <NotFoundPage onNavigate={navigate} />
           ) : (
             <HomePage onNavigate={navigate} />
-          )
-        ) : route === 'drafts' ? (
-          isAuthenticated ? (
-            <DraftsPage onNavigate={navigate} />
-          ) : (
-            <HomePage onNavigate={navigate} />
-          )
-        ) : route === 'gif-generator' ? (
-          <GifGeneratorPage onNavigate={navigate} />
-        ) : route === 'community' ? (
-          <CommunityPage onNavigate={navigate} />
-        ) : (
-          <HomePage onNavigate={navigate} />
-        )}
+          )}
+        </Suspense>
       </main>
 
       {/* Global Footer */}
