@@ -123,6 +123,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                         } else if (link.href === '#community' || link.href === '#explore') {
                           e.preventDefault();
                           onNavigate('/community');
+                        } else if (link.href === '#pricing') {
+                          e.preventDefault();
+                          onNavigate('/pricing');
                         } else if (link.href.startsWith('#')) {
                           e.preventDefault();
                           onNavigate(link.href);

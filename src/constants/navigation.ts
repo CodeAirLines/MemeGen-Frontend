@@ -11,11 +11,13 @@ export const MAIN_NAV_LINKS: NavLink[] = [
   { label: 'GIF Maker', href: '#gif-maker' },
   { label: 'AI Tools', href: '#ai-tools' },
   { label: 'Community', href: '#community' },
+  { label: 'Pricing', href: '#pricing' },
 ];
 
 export const FOOTER_PRODUCT_LINKS = [
   { label: 'Home', href: '#home' },
   { label: 'Meme Generator', href: '#create' },
+  { label: 'Pricing & Plans', href: '#pricing' },
   { label: 'My Drafts', href: '#drafts' },
   { label: 'Creator Profile', href: '#profile' },
   { label: 'Templates', href: '#templates' },

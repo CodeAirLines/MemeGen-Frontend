@@ -16,6 +16,10 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const DraftsPage = lazy(() => import('./pages/DraftsPage'));
 const GifGeneratorPage = lazy(() => import('./pages/GifGeneratorPage'));
 const CommunityPage = lazy(() => import('./pages/CommunityPage'));
+const PricingPage = lazy(() => import('./pages/PricingPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const PaymentSuccessPage = lazy(() => import('./pages/PaymentSuccessPage'));
+const PaymentFailedPage = lazy(() => import('./pages/PaymentFailedPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 export const App: React.FC = () => {
@@ -149,6 +153,14 @@ export const App: React.FC = () => {
             <GifGeneratorPage onNavigate={navigate} />
           ) : route === 'community' ? (
             <CommunityPage onNavigate={navigate} />
+          ) : route === 'pricing' ? (
+            <PricingPage onNavigate={navigate} />
+          ) : route === 'checkout' ? (
+            <CheckoutPage onNavigate={navigate} />
+          ) : route === 'payment-success' ? (
+            <PaymentSuccessPage onNavigate={navigate} />
+          ) : route === 'payment-failed' ? (
+            <PaymentFailedPage onNavigate={navigate} />
           ) : route === 'not-found' ? (
             <NotFoundPage onNavigate={navigate} />
           ) : (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Bell, Menu, X, User, Bookmark, LogOut, ChevronDown, Plus } from 'lucide-react';
+import { Bell, Menu, X, User, Bookmark, LogOut, ChevronDown, Plus, Crown } from 'lucide-react';
 import { MAIN_NAV_LINKS } from '../../constants/navigation';
 import { SearchInput } from '../ui/SearchInput';
 import { IconButton } from '../ui/IconButton';
@@ -8,6 +8,7 @@ import { useTemplateStore } from '../../stores/useTemplateStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { useNotificationStore } from '../../stores/useNotificationStore';
+import { useSubscriptionStore } from '../../stores/useSubscriptionStore';
 import type { MemeTemplate } from '../../types/template';
 
 const NotificationDropdown = lazy(() => import('./NotificationDropdown'));
@@ -38,6 +39,8 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const toggleNotifications = useNotificationStore((state) => state.toggleNotifications);
   const closeNotifications = useNotificationStore((state) => state.closeNotifications);
   const unreadCount = useNotificationStore((state) => state.unreadCount);
+
+  const currentSubscription = useSubscriptionStore((state) => state.currentSubscription);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -221,6 +224,9 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       } else if (link.href === '#gif-maker' && onNavigate) {
                         e.preventDefault();
                         onNavigate('/gif-maker');
+                      } else if (link.href === '#pricing' && onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/pricing');
                       } else if (onNavigate && link.href.startsWith('#')) {
                         e.preventDefault();
                         onNavigate(link.href);
@@ -318,6 +324,28 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   <span className="hidden xl:inline whitespace-nowrap">Drafts</span>
                 </a>
 
+                {/* Upgrade / Active Plan Pill */}
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate('/pricing');
+                    }
+                  }}
+                  className={`text-xs font-bold px-2 sm:px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                    currentSubscription.planId !== 'free'
+                      ? 'bg-amber-400/15 text-amber-300 border border-amber-400/30 hover:border-amber-300'
+                      : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xs hover:shadow-cyan-500/25'
+                  }`}
+                  title="Subscription & Upgrade"
+                >
+                  <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <span className="hidden xl:inline uppercase tracking-wider text-[10px]">
+                    {currentSubscription.planId !== 'free' ? currentSubscription.planId : 'Upgrade'}
+                  </span>
+                </a>
+
                 {/* Profile Avatar Dropdown Entry */}
                 <div className="relative shrink-0">
                   <button
@@ -410,6 +438,25 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                           >
                             <Bookmark className="w-4 h-4 text-cyan-400" />
                             <span>My Saved Drafts</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfileDropdownOpen(false);
+                              if (onNavigate) onNavigate('/pricing');
+                            }}
+                            className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <Crown className="w-4 h-4 text-amber-400" />
+                              <span>Subscription &amp; Plans</span>
+                            </div>
+                            {currentSubscription.planId !== 'free' && (
+                              <span className="text-[10px] uppercase font-extrabold text-amber-300 bg-amber-950/60 border border-amber-500/30 px-1.5 py-0.5 rounded-md">
+                                {currentSubscription.planId}
+                              </span>
+                            )}
                           </button>
 
                           <button
@@ -630,6 +677,9 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       } else if (link.href === '#gif-maker' && onNavigate) {
                         e.preventDefault();
                         onNavigate('/gif-maker');
+                      } else if (link.href === '#pricing' && onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/pricing');
                       } else if (onNavigate && link.href.startsWith('#')) {
                         e.preventDefault();
                         onNavigate(link.href);
@@ -697,6 +747,28 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   >
                     <Bookmark className="w-4 h-4 text-cyan-400" />
                     <span>My Drafts</span>
+                  </a>
+
+                  <a
+                    href="#pricing"
+                    onClick={(e) => {
+                      closeMobileMenu();
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/pricing');
+                      }
+                    }}
+                    className="px-3.5 py-3 text-sm font-medium rounded-xl text-slate-200 hover:text-cyan-300 hover:bg-white/10 flex items-center justify-between min-h-[44px]"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Crown className="w-4 h-4 text-amber-400" />
+                      <span>Subscription &amp; Plans</span>
+                    </div>
+                    {currentSubscription.planId !== 'free' && (
+                      <span className="text-[10px] uppercase font-extrabold text-amber-300 bg-amber-950/60 border border-amber-500/30 px-2 py-0.5 rounded-md">
+                        {currentSubscription.planId}
+                      </span>
+                    )}
                   </a>
 
                   <a

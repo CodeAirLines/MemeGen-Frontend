@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Check, ArrowRight, Zap, Crown, Users } from 'lucide-react';
+import { useSubscriptionStore } from '../../stores/useSubscriptionStore';
 
-export const PricingSection: React.FC = () => {
+export interface PricingSectionProps {
+  onNavigate?: (route: string) => void;
+}
+
+export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate }) => {
   const [annualBilling, setAnnualBilling] = useState(true);
+  const selectPlanForCheckout = useSubscriptionStore((state) => state.selectPlanForCheckout);
+  const setBillingCycle = useSubscriptionStore((state) => state.setBillingCycle);
 
   return (
     <section id="pricing" className="scroll-mt-24 space-y-12" aria-label="Pricing Plans">
@@ -89,6 +96,14 @@ export const PricingSection: React.FC = () => {
           <div className="pt-8">
             <a
               href="#templates"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) {
+                  onNavigate('#templates');
+                } else {
+                  document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="w-full py-3 px-4 rounded-xl border border-slate-300 text-slate-800 font-bold text-xs flex items-center justify-center hover:bg-slate-50 hover:border-slate-400 hover:scale-102 active:scale-95 transition-all cursor-pointer"
             >
               Get Started Free
@@ -153,6 +168,16 @@ export const PricingSection: React.FC = () => {
           <div className="pt-8">
             <button
               type="button"
+              onClick={() => {
+                const cycle = annualBilling ? 'yearly' : 'monthly';
+                setBillingCycle(cycle);
+                selectPlanForCheckout('pro', cycle);
+                if (onNavigate) {
+                  onNavigate('/checkout');
+                } else {
+                  window.location.href = '/checkout';
+                }
+              }}
               className="w-full py-3.5 px-4 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/40 hover:shadow-xl hover:shadow-blue-400/50 hover:scale-102 active:scale-95 transition-all duration-200 cursor-pointer"
             >
               <span>Upgrade to Pro Now</span>
@@ -208,12 +233,39 @@ export const PricingSection: React.FC = () => {
           <div className="pt-8">
             <button
               type="button"
+              onClick={() => {
+                const cycle = annualBilling ? 'yearly' : 'monthly';
+                setBillingCycle(cycle);
+                selectPlanForCheckout('premium', cycle);
+                if (onNavigate) {
+                  onNavigate('/checkout');
+                } else {
+                  window.location.href = '/checkout';
+                }
+              }}
               className="w-full py-3 px-4 rounded-xl border border-slate-300 hover:border-slate-400 text-slate-900 font-bold text-xs flex items-center justify-center transition-colors cursor-pointer"
             >
               Start 14-Day Team Trial
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Link to Dedicated Pricing Page */}
+      <div className="text-center pt-2">
+        <button
+          type="button"
+          onClick={() => {
+            if (onNavigate) {
+              onNavigate('/pricing');
+            } else {
+              window.location.href = '/pricing';
+            }
+          }}
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+        >
+          <span>Compare full feature breakdown and FAQ on the Pricing page &rarr;</span>
+        </button>
       </div>
     </section>
   );

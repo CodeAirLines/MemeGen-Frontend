@@ -7,14 +7,17 @@ import {
   Flame,
   ExternalLink,
   Plus,
+  CreditCard,
 } from 'lucide-react';
 import { DraftGrid } from '../drafts/DraftGrid';
+import { SubscriptionManagement } from '../subscription/SubscriptionManagement';
 import { Button } from '../../components/ui/Button';
 import { POPULAR_TEMPLATES } from '../../constants/templates';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 import { useDraftStore } from '../../stores/useDraftStore';
+import { useSubscriptionStore } from '../../stores/useSubscriptionStore';
 
-export type ProfileTab = 'overview' | 'drafts' | 'published';
+export type ProfileTab = 'overview' | 'drafts' | 'published' | 'subscription';
 
 export interface ProfileTabsProps {
   onNavigate?: (route: string) => void;
@@ -24,6 +27,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<ProfileTab>('overview');
   const setSelectedTemplate = useTemplateStore((state) => state.setSelectedTemplate);
   const drafts = useDraftStore((state) => state.drafts);
+  const currentSubscription = useSubscriptionStore((state) => state.currentSubscription);
 
   const handleUseTemplate = (template: typeof POPULAR_TEMPLATES[0]) => {
     setSelectedTemplate(template);
@@ -84,6 +88,30 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ onNavigate }) => {
           <span>Published Memes</span>
           <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium ml-0.5">
             0
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('subscription')}
+          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
+            activeTab === 'subscription'
+              ? 'bg-white text-blue-600 shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+          }`}
+          aria-selected={activeTab === 'subscription'}
+          role="tab"
+        >
+          <CreditCard className="w-4 h-4 shrink-0" />
+          <span>Subscription &amp; Billing</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.5 rounded-full uppercase font-extrabold ml-0.5 ${
+              currentSubscription.planId !== 'free'
+                ? 'bg-amber-100 text-amber-800'
+                : 'bg-slate-200 text-slate-600'
+            }`}
+          >
+            {currentSubscription.planId}
           </span>
         </button>
       </div>
@@ -223,6 +251,16 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ onNavigate }) => {
               Create New Meme
             </Button>
           </div>
+        </div>
+      )}
+
+      {/* 4. Subscription & Billing Tab */}
+      {activeTab === 'subscription' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          <SubscriptionManagement
+            onNavigate={onNavigate}
+            onUpgradeClick={() => onNavigate?.('/pricing')}
+          />
         </div>
       )}
     </div>

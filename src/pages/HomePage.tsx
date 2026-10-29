@@ -807,6 +807,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <div className="pt-4">
                 <a
                   href="#pricing"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate('/pricing');
+                    }
+                  }}
                   className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm px-6 py-3 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
                 >
                   <span>View Pricing Plans</span>
@@ -869,7 +875,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         {/* ============================================================== */}
         {/* PRICING PLANS SECTION                                          */}
         {/* ============================================================== */}
-        <PricingSection />
+        <PricingSection onNavigate={onNavigate} />
 
         {/* ============================================================== */}
         {/* MEME CULTURE BLOG & VIRAL GUIDES                               */}

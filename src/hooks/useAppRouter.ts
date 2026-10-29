@@ -9,6 +9,10 @@ export type AppRoute =
   | 'drafts'
   | 'gif-generator'
   | 'community'
+  | 'pricing'
+  | 'checkout'
+  | 'payment-success'
+  | 'payment-failed'
   | 'not-found';
 
 function getCurrentRoute(): AppRoute {
@@ -52,6 +56,37 @@ function getCurrentRoute(): AppRoute {
     pathname.startsWith('/community')
   ) {
     return 'community';
+  }
+  if (
+    pathname === '/pricing' ||
+    hash === '#pricing' ||
+    pathname === '/subscription' ||
+    hash === '#subscription' ||
+    pathname === '/plans' ||
+    hash === '#plans'
+  ) {
+    return 'pricing';
+  }
+  if (pathname === '/checkout' || hash === '#checkout') {
+    return 'checkout';
+  }
+  if (
+    pathname === '/payment/success' ||
+    hash === '#payment/success' ||
+    pathname === '/payment-success' ||
+    hash === '#payment-success'
+  ) {
+    return 'payment-success';
+  }
+  if (
+    pathname === '/payment/failed' ||
+    hash === '#payment/failed' ||
+    pathname === '/payment-failed' ||
+    hash === '#payment-failed' ||
+    pathname === '/payment/cancel' ||
+    hash === '#payment/cancel'
+  ) {
+    return 'payment-failed';
   }
 
   // Known home paths, templates section, AI tools, and root anchor links
@@ -148,6 +183,44 @@ export function useAppRouter() {
     ) {
       window.history.pushState({}, '', '/community');
       setRoute('community');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/pricing' ||
+      normalized === '#pricing' ||
+      normalized === '/subscription' ||
+      normalized === '#subscription' ||
+      normalized === '/plans' ||
+      normalized === '#plans'
+    ) {
+      window.history.pushState({}, '', '/pricing');
+      setRoute('pricing');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/checkout' ||
+      normalized === '#checkout'
+    ) {
+      window.history.pushState({}, '', '/checkout');
+      setRoute('checkout');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/payment/success' ||
+      normalized === '#payment/success' ||
+      normalized === '/payment-success' ||
+      normalized === '#payment-success'
+    ) {
+      window.history.pushState({}, '', '/payment/success');
+      setRoute('payment-success');
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (
+      normalized === '/payment/failed' ||
+      normalized === '#payment/failed' ||
+      normalized === '/payment-failed' ||
+      normalized === '#payment-failed' ||
+      normalized === '/payment/cancel' ||
+      normalized === '#payment/cancel'
+    ) {
+      window.history.pushState({}, '', '/payment/failed');
+      setRoute('payment-failed');
       if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (
       normalized === '/404' ||
