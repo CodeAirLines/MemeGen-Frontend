@@ -8,7 +8,7 @@ import { Button } from '../../components/ui/Button';
 import { SearchInput } from '../../components/ui/SearchInput';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 
-type SortOption = 'popular' | 'name-asc' | 'name-desc';
+type SortOption = 'popular' | 'trending' | 'newest' | 'name-asc' | 'name-desc';
 
 const MORE_CATEGORIES = ['Anime', 'Work', 'Wholesome', 'Relatable'];
 
@@ -67,6 +67,17 @@ export const TemplateGrid: React.FC = () => {
     result.sort((a, b) => {
       if (sortBy === 'popular') {
         return b.usageCount - a.usageCount;
+      }
+      if (sortBy === 'trending') {
+        if (b.isTrending !== a.isTrending) {
+          return b.isTrending ? 1 : -1;
+        }
+        return b.usageCount - a.usageCount;
+      }
+      if (sortBy === 'newest') {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
       }
       if (sortBy === 'name-asc') {
         return a.name.localeCompare(b.name);
@@ -142,6 +153,8 @@ export const TemplateGrid: React.FC = () => {
               className="h-9 text-xs font-semibold bg-white border border-slate-200 rounded-xl px-3 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-2xs cursor-pointer"
             >
               <option value="popular">Most Popular</option>
+              <option value="trending">Trending Now</option>
+              <option value="newest">Recently Added</option>
               <option value="name-asc">Alphabetical (A → Z)</option>
               <option value="name-desc">Alphabetical (Z → A)</option>
             </select>

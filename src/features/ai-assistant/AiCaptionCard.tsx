@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, ArrowRight, Sparkles } from 'lucide-react';
+import { Copy, Check, ArrowRight, Bot } from 'lucide-react';
 import type { AiCaptionSuggestion } from '../../types/ai';
 import { AI_TONE_LABELS } from './data/aiPresets';
 import { Button } from '../../components/ui/Button';
@@ -66,7 +66,7 @@ export const AiCaptionCard: React.FC<AiCaptionCardProps> = ({
       {showConfirmReplace && (
         <div className="mb-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-slate-700 space-y-2 animate-in fade-in zoom-in-95 duration-150">
           <p className="font-semibold text-blue-900 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <Bot className="w-3.5 h-3.5 text-blue-600 shrink-0" />
             <span>Apply to Meme Editor:</span>
           </p>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5">

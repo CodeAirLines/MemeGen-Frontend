@@ -10,7 +10,6 @@ import {
   Smartphone,
   Building2,
   Wallet,
-  Sparkles,
   Zap,
   Crown,
   Info,
@@ -732,7 +731,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 {pricing.discountAmount > 0 && (
                   <div className="flex items-center justify-between text-emerald-600 font-semibold">
                     <span className="flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5" />
+                      <Tag className="w-3.5 h-3.5" />
                       <span>Coupon Discount ({pricing.discountPercent}%)</span>
                     </span>
                     <span>-₹{pricing.discountAmount.toLocaleString('en-IN')}</span>

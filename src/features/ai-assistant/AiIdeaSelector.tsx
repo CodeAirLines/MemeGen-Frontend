@@ -4,7 +4,7 @@ import {
   GraduationCap,
   Briefcase,
   HeartHandshake,
-  Sparkles,
+  Smile,
   Layers,
   ArrowUpRight,
 } from 'lucide-react';
@@ -22,7 +22,7 @@ const CATEGORY_ICONS: Record<AiCategory, React.ComponentType<{ className?: strin
   student: GraduationCap,
   work: Briefcase,
   relationships: HeartHandshake,
-  'tamil-humor': Sparkles,
+  'tamil-humor': Smile,
 };
 
 export const AiIdeaSelector: React.FC<AiIdeaSelectorProps> = ({

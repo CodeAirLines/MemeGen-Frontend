@@ -94,7 +94,7 @@ export const App: React.FC = () => {
 
   // Standard Main Application Layout
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-blue-600 selection:text-white relative">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 selection:bg-blue-600 selection:text-white relative">
       {/* Accessibility Skip Link */}
       <a
         href="#main-content"

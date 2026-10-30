@@ -16,8 +16,8 @@ import {
   MessageCircle,
   Check,
   Star,
-  Users,
   Grid,
+  ShieldCheck,
 } from 'lucide-react';
 import { TemplateGrid } from '../features/templates/TemplateGrid';
 import { TemplatePreviewModal } from '../features/templates/TemplatePreviewModal';
@@ -92,24 +92,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
               {/* Buttons */}
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 w-full sm:w-auto">
-                <a href="#templates" className="w-full sm:w-auto">
+                <a href="#create" className="w-full sm:w-auto">
                   <Button
                     variant="primary"
                     size="lg"
                     rightIcon={<ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />}
                     className="w-full sm:w-auto shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105 active:scale-95 group font-semibold"
                   >
-                    Explore Templates
+                    Create Meme Now
                   </Button>
                 </a>
 
-                <a href="#create" className="w-full sm:w-auto">
+                <a href="#templates" className="w-full sm:w-auto">
                   <Button
                     variant="secondary"
                     size="lg"
                     className="w-full sm:w-auto shadow-md hover:shadow-xl hover:-translate-y-1 hover:scale-105 active:scale-95 font-semibold text-slate-900"
                   >
-                    Try Meme Playground
+                    Explore Templates
                   </Button>
                 </a>
               </div>
@@ -139,7 +139,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   />
                 </div>
                 <span className="text-xs text-slate-300 font-medium">
-                  Join 2M+ creators making memes daily
+                  Trusted by creators for fast, watermark-free memes &amp; GIF tools
                 </span>
               </div>
             </div>
@@ -309,10 +309,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <Grid className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight">10M+</div>
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight">500+</div>
               <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-                <span className="sm:hidden">Memes</span>
-                <span className="hidden sm:inline">Memes Created</span>
+                <span className="sm:hidden">Templates</span>
+                <span className="hidden sm:inline">Meme Templates</span>
               </div>
             </div>
           </div>
@@ -320,13 +320,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           {/* Stat 2 */}
           <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3.5 justify-center sm:justify-start p-1 sm:p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 cursor-pointer group text-center sm:text-left">
             <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-200 shadow-xs">
-              <Users className="w-4 h-4 sm:w-6 sm:h-6" />
+              <ShieldCheck className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-cyan-600 transition-colors leading-tight">2M+</div>
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-cyan-600 transition-colors leading-tight">0</div>
               <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-                <span className="sm:hidden">Creators</span>
-                <span className="hidden sm:inline">Active Creators</span>
+                <span className="sm:hidden">Watermarks</span>
+                <span className="hidden sm:inline">Watermarks on Pro</span>
               </div>
             </div>
           </div>
@@ -337,10 +337,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <Layers className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors leading-tight">500K+</div>
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors leading-tight">100%</div>
               <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-                <span className="sm:hidden">Templates</span>
-                <span className="hidden sm:inline">Meme Templates</span>
+                <span className="sm:hidden">Private</span>
+                <span className="hidden sm:inline">Client-Side Speed</span>
               </div>
             </div>
           </div>
@@ -351,10 +351,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <Star className="w-4 h-4 sm:w-6 sm:h-6 fill-amber-400 text-amber-400 group-hover:fill-amber-950 group-hover:text-amber-950" />
             </div>
             <div className="min-w-0">
-              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors leading-tight">4.8/5</div>
+              <div className="text-xs xs:text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors leading-tight">4K</div>
               <div className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-                <span className="sm:hidden">Rating</span>
-                <span className="hidden sm:inline">User Rating</span>
+                <span className="sm:hidden">Ultra-HD</span>
+                <span className="hidden sm:inline">Ultra-HD Exports</span>
               </div>
             </div>
           </div>

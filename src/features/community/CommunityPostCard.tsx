@@ -4,7 +4,7 @@ import {
   MessageCircle,
   Share2,
   Check,
-  Sparkles,
+  Repeat,
   ShieldCheck,
 } from 'lucide-react';
 import type { CommunityPost } from '../../types/community';
@@ -221,7 +221,7 @@ export const CommunityPostCard: React.FC<CommunityPostCardProps> = ({
                 title="Remix in Meme Editor"
                 className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
               >
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <Repeat className="w-3.5 h-3.5 text-blue-600" />
               </IconButton>
             )}
           </div>

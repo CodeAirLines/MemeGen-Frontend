@@ -276,7 +276,9 @@ export const MemeCanvas: React.FC<MemeCanvasProps> = ({ onCanvasSizeChange }) =>
                         : undefined,
                     paintOrder: 'stroke fill',
                     textShadow:
-                      layer.strokeWidth === 0
+                      layer.shadowBlur && layer.shadowBlur > 0
+                        ? `0 2px ${layer.shadowBlur}px ${layer.shadowColor || 'rgba(0,0,0,0.85)'}`
+                        : layer.strokeWidth === 0
                         ? '0 2px 8px rgba(0,0,0,0.85)'
                         : undefined,
                     lineHeight: 1.15,

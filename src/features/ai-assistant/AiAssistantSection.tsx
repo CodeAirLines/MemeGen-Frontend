@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Wand2,
-  Sparkles,
+  Bot,
   RefreshCw,
   X,
   Shuffle,
@@ -104,7 +104,7 @@ export const AiAssistantSection: React.FC<AiAssistantSectionProps> = ({ onNaviga
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-blue-100/80">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/90 text-blue-700 text-xs font-bold tracking-wider uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+              <Bot className="w-3.5 h-3.5 text-blue-600" />
               <span>AI MEME ASSISTANT</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">

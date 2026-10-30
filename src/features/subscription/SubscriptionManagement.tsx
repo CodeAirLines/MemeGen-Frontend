@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Crown, Zap, Sparkles, Calendar, CreditCard, ShieldCheck, RefreshCw, AlertCircle } from 'lucide-react';
+import { Crown, Zap, Layers, Calendar, CreditCard, ShieldCheck, RefreshCw, AlertCircle } from 'lucide-react';
 import { useSubscriptionStore } from '../../stores/useSubscriptionStore';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 import { Button } from '../../components/ui/Button';
@@ -75,7 +75,7 @@ export const SubscriptionManagement: React.FC<SubscriptionManagementProps> = ({
           >
             {isPremium && <Crown className="w-6 h-6 fill-current" />}
             {isPro && <Zap className="w-6 h-6 fill-current" />}
-            {isFree && <Sparkles className="w-6 h-6" />}
+            {isFree && <Layers className="w-6 h-6" />}
           </div>
           <div>
             <div className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ArrowLeft, Sparkles, ShieldCheck, Zap, HeartHandshake } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Zap, HeartHandshake } from 'lucide-react';
 import { Container } from '../components/ui/Container';
 import { SUBSCRIPTION_PLANS } from '../constants/subscription';
 import { useSubscriptionStore } from '../stores/useSubscriptionStore';
@@ -77,7 +77,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
         {/* Hero Section */}
         <div className="text-center max-w-2xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Zap className="w-3.5 h-3.5" />
             <span>Flexible, Transparent Plans</span>
           </div>
 

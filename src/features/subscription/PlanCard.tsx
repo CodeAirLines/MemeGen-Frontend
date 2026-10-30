@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, X, Zap, Crown, Sparkles } from 'lucide-react';
+import { Check, X, Zap, Crown, Layers } from 'lucide-react';
 import type { SubscriptionPlan, BillingCycle, PlanId } from '../../types/subscription';
 import { Button } from '../../components/ui/Button';
 
@@ -79,7 +79,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   : 'bg-slate-100 text-slate-700'
               }`}
             >
-              {isFree && <Sparkles className="w-5 h-5 text-slate-700" />}
+              {isFree && <Layers className="w-5 h-5 text-slate-700" />}
               {isPro && <Zap className="w-5 h-5 text-white" />}
               {isPremium && <Crown className="w-5 h-5 text-white" />}
             </div>

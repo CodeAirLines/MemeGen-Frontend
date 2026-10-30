@@ -30,7 +30,14 @@ function getCurrentRoute(): AppRoute {
   if (pathname === '/editor' || hash === '#editor' || pathname.startsWith('/editor')) {
     return 'editor';
   }
-  if (pathname === '/profile' || hash === '#profile' || pathname.startsWith('/profile')) {
+  if (
+    pathname === '/profile' ||
+    hash === '#profile' ||
+    pathname.startsWith('/profile') ||
+    pathname === '/dashboard' ||
+    hash === '#dashboard' ||
+    pathname.startsWith('/dashboard')
+  ) {
     return 'profile';
   }
   if (pathname === '/drafts' || hash === '#drafts' || pathname.startsWith('/drafts')) {
@@ -153,7 +160,14 @@ export function useAppRouter() {
       window.history.pushState({}, '', '/editor');
       setRoute('editor');
       if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (normalized === '/profile' || normalized === '#profile' || normalized.startsWith('/profile')) {
+    } else if (
+      normalized === '/profile' ||
+      normalized === '#profile' ||
+      normalized.startsWith('/profile') ||
+      normalized === '/dashboard' ||
+      normalized === '#dashboard' ||
+      normalized.startsWith('/dashboard')
+    ) {
       window.history.pushState({}, '', '/profile');
       setRoute('profile');
       if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });

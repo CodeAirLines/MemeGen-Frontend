@@ -10,7 +10,12 @@ import {
   Layers,
   Loader2,
   Bookmark,
-  Sparkles,
+  Bot,
+  Upload,
+  Share2,
+  Copy,
+  ChevronDown,
+  FileImage,
 } from 'lucide-react';
 import { useEditorStore } from '../../stores/useEditorStore';
 import { useDraftStore } from '../../stores/useDraftStore';
@@ -19,12 +24,20 @@ import { useTemplateStore } from '../../stores/useTemplateStore';
 interface EditorToolbarProps {
   onBack: () => void;
   onExport: () => void;
+  onExportFormat?: (format: 'png' | 'jpeg') => void;
+  onCopyImage?: () => void;
+  onShareImage?: () => void;
+  onOpenUploadModal?: () => void;
   onOpenAiModal?: () => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onBack,
   onExport,
+  onExportFormat,
+  onCopyImage,
+  onShareImage,
+  onOpenUploadModal,
   onOpenAiModal,
 }) => {
   const memeTitle = useEditorStore((state) => state.memeTitle);
@@ -45,6 +58,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   const saveDraft = useDraftStore((state) => state.saveDraft);
   const setNotification = useTemplateStore((state) => state.setNotification);
   const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
 
   // Inline editing state for Meme Title
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -215,6 +229,20 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <span className="hidden lg:inline">Reset</span>
         </button>
 
+        {/* Upload Custom Image Button */}
+        {onOpenUploadModal && (
+          <button
+            type="button"
+            onClick={onOpenUploadModal}
+            className="p-1.5 xs:p-2 sm:px-3 sm:py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white transition-all cursor-pointer flex items-center justify-center min-w-[34px] min-h-[34px] text-xs font-semibold gap-1.5"
+            title="Upload Custom Image"
+            aria-label="Upload custom image to editor"
+          >
+            <Upload className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span className="hidden md:inline">Upload</span>
+          </button>
+        )}
+
         {/* Change Template Button (Tablet / Mobile) */}
         <button
           type="button"
@@ -226,7 +254,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <span className="hidden sm:inline">Templates</span>
         </button>
 
-        {/* AI Magic Button */}
+        {/* AI Assistant Button */}
         {onOpenAiModal && (
           <button
             type="button"
@@ -235,8 +263,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             title="AI Meme Caption Assistant"
             aria-label="Open AI Caption Assistant"
           >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-300 shrink-0" />
-            <span className="hidden sm:inline">AI Magic</span>
+            <Bot className="w-3.5 h-3.5 text-cyan-300 shrink-0" />
+            <span className="hidden sm:inline">AI Assistant</span>
           </button>
         )}
 
@@ -257,26 +285,119 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <span className="hidden md:inline">Save Draft</span>
         </button>
 
-        {/* Download / Export Primary Button */}
-        <button
-          type="button"
-          onClick={onExport}
-          disabled={isExporting}
-          className="px-2.5 xs:px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 disabled:opacity-60 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 cursor-pointer min-h-[34px] shrink-0"
-          aria-label="Export meme as PNG image"
-        >
-          {isExporting ? (
+        {/* Download & Multi-Format Export Group */}
+        <div className="relative flex items-center">
+          <button
+            type="button"
+            onClick={onExport}
+            disabled={isExporting}
+            className="px-2.5 xs:px-3 sm:px-4 py-1.5 sm:py-2 rounded-l-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 hover:shadow-cyan-500/40 active:scale-95 disabled:opacity-60 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 cursor-pointer min-h-[34px] shrink-0"
+            aria-label="Export meme image"
+          >
+            {isExporting ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-white" />
+                <span className="hidden xs:inline">Exporting...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Download</span>
+              </>
+            )}
+          </button>
+
+          {/* Export Options Dropdown Trigger */}
+          <button
+            type="button"
+            onClick={() => setIsExportMenuOpen((prev) => !prev)}
+            disabled={isExporting}
+            className="px-1.5 py-1.5 sm:py-2 rounded-r-xl bg-blue-700 hover:bg-blue-600 text-white border-l border-white/20 transition-colors cursor-pointer min-h-[34px] flex items-center justify-center"
+            title="More export formats & sharing"
+            aria-label="More export options"
+            aria-expanded={isExportMenuOpen}
+          >
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExportMenuOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {/* Export Formats Dropdown Popover */}
+          {isExportMenuOpen && (
             <>
-              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-white" />
-              <span className="hidden xs:inline">Exporting...</span>
-            </>
-          ) : (
-            <>
-              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span>Download</span>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setIsExportMenuOpen(false)}
+                aria-hidden="true"
+              />
+              <div className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-[#071330]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-50 text-slate-200 animate-in fade-in zoom-in-95 duration-150 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsExportMenuOpen(false);
+                    if (onExportFormat) onExportFormat('png');
+                    else onExport();
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                >
+                  <FileImage className="w-4 h-4 text-cyan-400" />
+                  <div>
+                    <p className="font-bold">Download PNG</p>
+                    <p className="text-[10px] text-slate-400 font-normal">Lossless high-res quality</p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsExportMenuOpen(false);
+                    if (onExportFormat) onExportFormat('jpeg');
+                    else onExport();
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                >
+                  <FileImage className="w-4 h-4 text-blue-400" />
+                  <div>
+                    <p className="font-bold">Download JPG</p>
+                    <p className="text-[10px] text-slate-400 font-normal">Smaller file size for web</p>
+                  </div>
+                </button>
+
+                {onCopyImage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsExportMenuOpen(false);
+                      onCopyImage();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                  >
+                    <Copy className="w-4 h-4 text-emerald-400" />
+                    <div>
+                      <p className="font-bold">Copy to Clipboard</p>
+                      <p className="text-[10px] text-slate-400 font-normal">Paste in chat / Discord</p>
+                    </div>
+                  </button>
+                )}
+
+                {onShareImage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsExportMenuOpen(false);
+                      onShareImage();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                  >
+                    <Share2 className="w-4 h-4 text-indigo-400" />
+                    <div>
+                      <p className="font-bold">Share Meme</p>
+                      <p className="text-[10px] text-slate-400 font-normal">Native device share menu</p>
+                    </div>
+                  </button>
+                )}
+              </div>
             </>
           )}
-        </button>
+        </div>
       </div>
     </header>
   );

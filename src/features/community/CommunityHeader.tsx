@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Sparkles,
   Plus,
   Flame,
   Clock,
@@ -63,8 +62,8 @@ export const CommunityHeader: React.FC<CommunityHeaderProps> = ({
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
-            Meme Hub Community <Sparkles className="w-6 h-6 text-cyan-400 shrink-0" />
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+            Meme Hub Community
           </h1>
 
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">

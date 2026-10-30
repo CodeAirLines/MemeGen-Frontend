@@ -54,7 +54,7 @@ export const AI_CATEGORY_LABELS: Record<
   },
   'tamil-humor': {
     label: 'Tamil & Local Humor',
-    iconName: 'Sparkles',
+    iconName: 'Smile',
     description: 'Iconic Kollywood dialogues, vadivelu vibes, and local tea shop banter',
   },
 };

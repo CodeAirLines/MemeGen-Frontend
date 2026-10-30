@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import {
   CheckCircle2,
-  Sparkles,
   Printer,
   ArrowRight,
   ShieldCheck,
@@ -48,7 +47,7 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({ onNaviga
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
+            <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Demo Transaction Complete</span>
           </div>
 

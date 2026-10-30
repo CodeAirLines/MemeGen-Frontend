@@ -3,7 +3,7 @@ import {
   Bell,
   Check,
   Trash2,
-  Sparkles,
+  Zap,
   Flame,
   Bookmark,
   MessageSquare,
@@ -71,7 +71,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
       case 'trending':
         return <Flame className="w-4 h-4 text-amber-400" />;
       case 'feature':
-        return <Sparkles className="w-4 h-4 text-cyan-400" />;
+        return <Zap className="w-4 h-4 text-cyan-400" />;
       case 'draft':
         return <Bookmark className="w-4 h-4 text-emerald-400" />;
       case 'system':

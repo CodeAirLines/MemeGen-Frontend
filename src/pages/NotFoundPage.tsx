@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Sparkles, Search, HelpCircle } from 'lucide-react';
+import { Home, Compass, AlertCircle, Search, HelpCircle } from 'lucide-react';
 import { Container } from '../components/ui/Container';
 import { Button } from '../components/ui/Button';
 
@@ -18,7 +18,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-600 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-blue-600/30">
-              <Sparkles className="w-4 h-4 text-cyan-300" />
+              <AlertCircle className="w-4 h-4 text-cyan-300" />
               <span>MEME NOT FOUND</span>
             </span>
           </div>
@@ -50,7 +50,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
           <Button
             variant="outline"
             size="md"
-            leftIcon={<Sparkles className="w-4 h-4 text-cyan-600" />}
+            leftIcon={<Compass className="w-4 h-4 text-cyan-600" />}
             onClick={() => onNavigate('/editor')}
             className="w-full sm:w-auto"
           >

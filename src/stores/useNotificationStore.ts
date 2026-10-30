@@ -40,7 +40,7 @@ const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'notif-2',
     type: 'feature',
-    title: 'GIF Maker 2.0 Live ✨',
+    title: 'GIF Maker 2.0 Live',
     message: 'Turn videos or photo bursts into high-res animated GIFs with zero watermarks.',
     timestamp: '1h ago',
     isRead: false,
@@ -75,7 +75,14 @@ function loadSavedNotifications(): AppNotification[] {
       return INITIAL_NOTIFICATIONS;
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : INITIAL_NOTIFICATIONS;
+    if (Array.isArray(parsed)) {
+      return parsed.map((item: AppNotification) => ({
+        ...item,
+        title: item.title ? item.title.replace(/\u2728/g, '').trim() : item.title,
+        message: item.message ? item.message.replace(/\u2728/g, '').trim() : item.message,
+      }));
+    }
+    return INITIAL_NOTIFICATIONS;
   } catch {
     return INITIAL_NOTIFICATIONS;
   }

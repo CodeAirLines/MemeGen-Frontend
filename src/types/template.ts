@@ -20,6 +20,8 @@ export interface MemeTemplate {
   tags: string[];
   description: string;
   usageCount: number;
+  isTrending?: boolean;
+  createdAt?: string;
   defaultTextSlots?: {
     id: string;
     placeholder: string;

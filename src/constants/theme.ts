@@ -5,28 +5,28 @@
 
 export const THEME_COLORS = {
   brand: {
-    primary: '#2563eb', // Blue 600
-    primaryHover: '#1d4ed8', // Blue 700
-    primaryLight: '#eff6ff', // Blue 50
+    primary: '#1463E9', // Strict manager primary blue
+    primaryHover: '#0E4FC7',
+    primaryLight: '#EFF6FF', // Strict manager light blue
     secondary: '#06b6d4', // Cyan 500
     secondaryHover: '#0891b2', // Cyan 600
     secondaryLight: '#ecfeff', // Cyan 50
-    dark: '#071330', // Deep brand navy
-    darkSurface: '#0c225a', // Translucent card navy
+    dark: '#0F172A', // Strict manager dark navy
+    darkSurface: '#1e293b',
   },
   status: {
     success: '#10b981', // Emerald 500
     warning: '#f59e0b', // Amber 500
     error: '#f43f5e', // Rose 500
-    info: '#3b82f6', // Blue 500
+    info: '#1463E9', // Brand Blue
   },
   neutral: {
     surfaceLight: '#ffffff',
-    surfaceSubtle: '#f8fafc',
-    surfaceDark: '#071330',
+    surfaceSubtle: '#F8FAFC', // Strict manager page background
+    surfaceDark: '#0F172A',
     borderLight: '#e2e8f0', // Slate 200
     borderSubtle: '#f1f5f9', // Slate 100
-    textPrimary: '#0f172a', // Slate 900
+    textPrimary: '#0F172A', // Slate 900
     textSecondary: '#475569', // Slate 600
     textMuted: '#94a3b8', // Slate 400
   },

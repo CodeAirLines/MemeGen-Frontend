@@ -4,8 +4,9 @@ import { MemeCanvas } from './MemeCanvas';
 import { EditorPropertiesPanel } from './EditorPropertiesPanel';
 import { ResetConfirmModal } from './ResetConfirmModal';
 import { TemplatePickerModal } from './TemplatePickerModal';
+import { CustomImageUploadModal } from './CustomImageUploadModal';
 import { AiEditorModal } from '../ai-assistant';
-import { exportMemeAsPng } from './exportMeme';
+import { exportMemeAsFormat, copyMemeToClipboard, shareMemeViaWebShare } from './exportMeme';
 import { useEditorStore } from '../../stores/useEditorStore';
 import { useTemplateStore } from '../../stores/useTemplateStore';
 
@@ -45,6 +46,7 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
   const setIsResetModalOpen = useEditorStore((state) => state.setIsResetModalOpen);
   const setIsTemplatePickerOpen = useEditorStore((state) => state.setIsTemplatePickerOpen);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   // -------------------------------------------------------------
   // Keyboard Shortcuts (Undo, Redo, Delete layer, Zoom, Escape)
@@ -61,6 +63,10 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
 
       // Escape key: close open modal first, otherwise deselect layer
       if (e.key === 'Escape') {
+        if (isUploadModalOpen) {
+          setIsUploadModalOpen(false);
+          return;
+        }
         if (isAiModalOpen) {
           setIsAiModalOpen(false);
           return;
@@ -80,7 +86,7 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
       }
 
       // Do not trigger canvas/editor shortcuts while typing or while modal dialog is open
-      if (isInput || isResetModalOpen || isTemplatePickerOpen || isAiModalOpen) {
+      if (isInput || isResetModalOpen || isTemplatePickerOpen || isAiModalOpen || isUploadModalOpen) {
         return;
       }
 
@@ -142,31 +148,36 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
     isResetModalOpen,
     isTemplatePickerOpen,
     isAiModalOpen,
+    isUploadModalOpen,
     setIsResetModalOpen,
     setIsTemplatePickerOpen,
     setIsAiModalOpen,
+    setIsUploadModalOpen,
   ]);
 
   // -------------------------------------------------------------
-  // High-Resolution PNG Export
+  // High-Resolution Export (PNG, JPEG), Clipboard & Native Share
   // -------------------------------------------------------------
-  const handleExport = async () => {
+  const handleExportFormat = async (format: 'png' | 'jpeg' = 'png') => {
     if (!activeTemplate || isExporting) return;
 
     setIsExporting(true);
     try {
-      const result = await exportMemeAsPng({
-        template: activeTemplate,
-        textLayers,
-        title: memeTitle || activeTemplate.name,
-        previewWidth: renderedCanvasSize.width,
-        previewHeight: renderedCanvasSize.height,
-      });
+      const result = await exportMemeAsFormat(
+        {
+          template: activeTemplate,
+          textLayers,
+          title: memeTitle || activeTemplate.name,
+          previewWidth: renderedCanvasSize.width,
+          previewHeight: renderedCanvasSize.height,
+        },
+        format
+      );
 
       if (result.success) {
         setNotification({
           type: 'success',
-          message: `"${memeTitle || activeTemplate.name}" downloaded successfully!`,
+          message: `"${memeTitle || activeTemplate.name}" downloaded as ${format.toUpperCase()}!`,
         });
       } else {
         setNotification({
@@ -185,12 +196,76 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
     }
   };
 
+  const handleExport = async () => {
+    return handleExportFormat('png');
+  };
+
+  const handleCopyClipboard = async () => {
+    if (!activeTemplate || isExporting) return;
+    setIsExporting(true);
+    try {
+      const result = await copyMemeToClipboard({
+        template: activeTemplate,
+        textLayers,
+        title: memeTitle || activeTemplate.name,
+        previewWidth: renderedCanvasSize.width,
+        previewHeight: renderedCanvasSize.height,
+      });
+
+      if (result.success) {
+        setNotification({
+          type: 'success',
+          message: 'Meme copied to clipboard! Ready to paste into Discord, Slack, or chat.',
+        });
+      } else {
+        setNotification({
+          type: 'info',
+          message: result.error || 'Could not copy image to clipboard.',
+        });
+      }
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!activeTemplate || isExporting) return;
+    setIsExporting(true);
+    try {
+      const result = await shareMemeViaWebShare({
+        template: activeTemplate,
+        textLayers,
+        title: memeTitle || activeTemplate.name,
+        previewWidth: renderedCanvasSize.width,
+        previewHeight: renderedCanvasSize.height,
+      });
+
+      if (result.success) {
+        setNotification({
+          type: 'success',
+          message: 'Meme shared successfully!',
+        });
+      } else {
+        setNotification({
+          type: 'info',
+          message: result.error || 'Native device share was unavailable.',
+        });
+      }
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-[100dvh] w-full max-w-[100vw] bg-[#070d1e] text-slate-100 overflow-hidden select-none">
       {/* Top Toolbar */}
       <EditorToolbar
         onBack={onBack}
         onExport={handleExport}
+        onExportFormat={handleExportFormat}
+        onCopyImage={handleCopyClipboard}
+        onShareImage={handleShare}
+        onOpenUploadModal={() => setIsUploadModalOpen(true)}
         onOpenAiModal={() => setIsAiModalOpen(true)}
       />
 
@@ -212,6 +287,10 @@ export const EditorStudio: React.FC<EditorStudioProps> = ({ onBack }) => {
       {/* Confirmation & Template Switcher Modals */}
       <ResetConfirmModal />
       <TemplatePickerModal />
+      <CustomImageUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+      />
       <AiEditorModal isOpen={isAiModalOpen} onClose={() => setIsAiModalOpen(false)} />
     </div>
   );

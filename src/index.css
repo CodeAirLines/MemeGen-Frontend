@@ -6,9 +6,11 @@
   --font-arvo: 'Arvo', serif;
   --font-oleo: 'Oleo Script', cursive;
 
-  --color-brand-blue: #2563eb;
+  --color-brand-blue: #1463e9;
   --color-brand-cyan: #06b6d4;
-  --color-brand-navy: #071330;
+  --color-brand-navy: #0f172a;
+  --color-brand-light: #eff6ff;
+  --color-page-bg: #f8fafc;
 }
 
 @layer base {
@@ -21,7 +23,7 @@
   body {
     font-family: var(--font-sans);
     color: #0f172a;
-    background-color: #ffffff;
+    background-color: #f8fafc;
     overflow-x: hidden;
     min-height: 100dvh;
     min-height: 100vh;

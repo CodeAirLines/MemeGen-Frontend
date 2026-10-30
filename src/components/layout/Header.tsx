@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Bell, Menu, X, User, Bookmark, LogOut, ChevronDown, Plus, Crown } from 'lucide-react';
+import { Bell, Menu, X, User, Bookmark, LogOut, ChevronDown, Plus, Crown, LayoutDashboard } from 'lucide-react';
 import { MAIN_NAV_LINKS } from '../../constants/navigation';
 import { SearchInput } from '../ui/SearchInput';
 import { IconButton } from '../ui/IconButton';
@@ -181,15 +181,15 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     <header className="fixed top-2 sm:top-4 inset-x-0 z-50 w-full px-2.5 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300">
       {/* Floating Island Container */}
       <div
-        className={`pointer-events-auto max-w-7xl mx-auto rounded-2xl lg:rounded-full bg-[#071330]/85 backdrop-blur-xl border transition-all duration-300 px-3 sm:px-6 ${
+        className={`pointer-events-auto max-w-7xl xl:max-w-[1380px] 2xl:max-w-[1440px] mx-auto rounded-2xl lg:rounded-full bg-[#071330]/85 backdrop-blur-xl border transition-all duration-300 px-3 sm:px-4 xl:px-5 2xl:px-6 ${
           isScrolled
             ? 'py-2 sm:py-2.5 border-blue-500/30 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.6),0_0_30px_rgba(37,99,235,0.25)] bg-[#071330]/90'
             : 'py-2 sm:py-3.5 border-white/15 shadow-[0_12px_36px_-10px_rgba(0,0,0,0.5),0_0_20px_rgba(37,99,235,0.15)] hover:border-blue-400/35 hover:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.65),0_0_28px_rgba(6,182,212,0.2)]'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 xl:gap-4 min-w-0">
+        <div className="flex items-center justify-between gap-1.5 lg:gap-2 xl:gap-3 min-w-0">
           {/* Left: Brand Logo & Main Nav */}
-          <div className="flex items-center gap-2.5 xl:gap-6 min-w-0 shrink-0">
+          <div className="flex items-center gap-1.5 lg:gap-2.5 xl:gap-4 min-w-0">
             {/* Logo - logo.png only */}
             <a
               href="#home"
@@ -200,12 +200,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
               <img
                 src="/logo.png"
                 alt="MemeHub"
-                className="h-7 sm:h-9 md:h-10 w-auto object-contain filter drop-shadow-[0_2px_14px_rgba(37,99,235,0.45)] group-hover:drop-shadow-[0_4px_22px_rgba(6,182,212,0.7)] transition-all duration-300"
+                className="h-7 sm:h-8.5 md:h-9.5 w-auto object-contain filter drop-shadow-[0_2px_14px_rgba(37,99,235,0.45)] group-hover:drop-shadow-[0_4px_22px_rgba(6,182,212,0.7)] transition-all duration-300 shrink-0"
               />
             </a>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 shrink-0" aria-label="Main navigation">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 min-w-0" aria-label="Main navigation">
               {MAIN_NAV_LINKS.map((link) => {
                 const isActive = (activeHash === link.href) || (!activeHash && link.href === '#home');
                 return (
@@ -232,7 +232,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                         onNavigate(link.href);
                       }
                     }}
-                    className={`px-2.5 xl:px-3 py-1.5 rounded-full text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-all duration-200 ${
+                    className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 rounded-full text-xs xl:text-[13px] 2xl:text-sm font-medium whitespace-nowrap transition-all duration-200 shrink-0 ${
                       isActive
                         ? 'text-white bg-white/15 shadow-xs font-semibold'
                         : 'text-slate-200 hover:text-white hover:bg-white/10 hover:-translate-y-0.5'
@@ -246,9 +246,9 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
           </div>
 
           {/* Right: Search, Notifications, Auth */}
-          <div className="hidden md:flex items-center gap-2 xl:gap-3 shrink-0">
+          <div className="hidden md:flex items-center gap-1.5 sm:gap-2 xl:gap-2.5 shrink-0">
             {/* Search Input Component with Live Suggestions Dropdown */}
-            <div className={`relative ${isAuthenticated ? 'w-32 lg:w-40 xl:w-56 2xl:w-64 transition-all duration-200' : 'w-44 lg:w-56 xl:w-64 2xl:w-72 transition-all duration-200'}`}>
+            <div className={`relative ${isAuthenticated ? 'w-24 lg:w-28 xl:w-36 2xl:w-48 focus-within:w-36 lg:focus-within:w-40 xl:focus-within:w-48 transition-all duration-200' : 'w-32 lg:w-40 xl:w-52 2xl:w-60 transition-all duration-200'}`}>
               <SearchInput
                 variant="dark"
                 shape="pill"
@@ -264,7 +264,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   setIsSearchFocused(false);
                 }}
                 onKeyDown={handleSearchSubmit}
-                placeholder="Search memes, templates..."
+                placeholder={isAuthenticated ? 'Search memes...' : 'Search memes, templates...'}
                 aria-label="Search memes and templates"
               />
 
@@ -317,11 +317,11 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       onNavigate('/drafts');
                     }
                   }}
-                  className="text-xs font-semibold text-slate-200 hover:text-white px-2 xl:px-2.5 py-1.5 rounded-full hover:bg-white/10 transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+                  className="text-xs font-semibold text-slate-200 hover:text-white p-2 xl:px-2.5 xl:py-1.5 rounded-full hover:bg-white/10 transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                   title="My Saved Drafts"
                 >
                   <Bookmark className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span className="hidden xl:inline whitespace-nowrap">Drafts</span>
+                  <span className="hidden 2xl:inline whitespace-nowrap">Drafts</span>
                 </a>
 
                 {/* Upgrade / Active Plan Pill */}
@@ -333,7 +333,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       onNavigate('/pricing');
                     }
                   }}
-                  className={`text-xs font-bold px-2 sm:px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                  className={`text-xs font-bold p-1.5 xl:px-2.5 xl:py-1 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 ${
                     currentSubscription.planId !== 'free'
                       ? 'bg-amber-400/15 text-amber-300 border border-amber-400/30 hover:border-amber-300'
                       : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xs hover:shadow-cyan-500/25'
@@ -341,7 +341,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   title="Subscription & Upgrade"
                 >
                   <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                  <span className="hidden xl:inline uppercase tracking-wider text-[10px]">
+                  <span className="hidden xl:inline uppercase tracking-wider text-[10px] whitespace-nowrap">
                     {currentSubscription.planId !== 'free' ? currentSubscription.planId : 'Upgrade'}
                   </span>
                 </a>
@@ -351,7 +351,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   <button
                     type="button"
                     onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                    className="flex items-center gap-1.5 sm:gap-2 p-1 sm:pl-1.5 sm:pr-2.5 sm:py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 transition-all duration-200 cursor-pointer group shrink-0 select-none"
+                    className="flex items-center gap-1.5 p-1 xl:pl-1.5 xl:pr-2.5 xl:py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 transition-all duration-200 cursor-pointer group shrink-0 select-none"
                     aria-expanded={profileDropdownOpen}
                     aria-haspopup="true"
                     aria-label="User profile menu"
@@ -366,7 +366,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                         }}
                       />
                     </div>
-                    <span className="hidden lg:inline text-xs font-semibold text-slate-200 group-hover:text-white truncate max-w-[80px] xl:max-w-[110px] whitespace-nowrap">
+                    <span className="hidden xl:inline text-xs font-semibold text-slate-200 group-hover:text-white truncate max-w-[70px] 2xl:max-w-[100px] whitespace-nowrap">
                       {profile?.displayName?.split(' ')[0] ||
                         authUser?.fullName?.split(' ')[0] ||
                         'Profile'}
@@ -416,6 +416,18 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
 
                         {/* Navigation items */}
                         <div className="py-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfileDropdownOpen(false);
+                              if (onNavigate) onNavigate('/dashboard');
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left"
+                          >
+                            <LayoutDashboard className="w-4 h-4 text-cyan-400" />
+                            <span>Creator Dashboard</span>
+                          </button>
+
                           <button
                             type="button"
                             onClick={() => {
@@ -589,6 +601,22 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
               </IconButton>
             </div>
 
+            {/* Mobile Prominent CTA */}
+            <a
+              href="#create"
+              onClick={(e) => {
+                closeMobileMenu();
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('/editor');
+                }
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-blue-600/30 active:scale-98 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Create Meme Now</span>
+            </a>
+
             {/* Mobile Search */}
             <div className="relative">
               <SearchInput
@@ -719,6 +747,21 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       </p>
                     </div>
                   </div>
+
+                  <a
+                    href="#dashboard"
+                    onClick={(e) => {
+                      closeMobileMenu();
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate('/dashboard');
+                      }
+                    }}
+                    className="px-3.5 py-3 text-sm font-medium rounded-xl text-slate-200 hover:text-cyan-300 hover:bg-white/10 flex items-center gap-2.5 min-h-[44px]"
+                  >
+                    <LayoutDashboard className="w-4 h-4 text-cyan-400" />
+                    <span>Creator Dashboard</span>
+                  </a>
 
                   <a
                     href="#profile"
